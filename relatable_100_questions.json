@@ -1,0 +1,902 @@
+[
+  {
+    "id": 1,
+    "pmid": "25304452",
+    "category": "\ud83e\udd57 Food, Nutrition & Weight",
+    "topic": "Gluten-Free Diet Deficiencies",
+    "question": "Nutritional assessment of gluten-free diet. Is gluten-free diet deficient in some nutrient?",
+    "decision": "yes",
+    "summary": "The gluten-free diet has minimal deficiencies, similar to those present in the diet with gluten, with an improvement in the lipid profile by increasing the proportion of monounsaturated fatty acids to the detriment of saturated fatty acids."
+  },
+  {
+    "id": 2,
+    "pmid": "23587089",
+    "category": "\ud83e\udd57 Food, Nutrition & Weight",
+    "topic": "School Food Policies for Healthy Eating",
+    "question": "School food policy at Dutch primary schools: room for improvement?",
+    "decision": "yes",
+    "summary": "Dutch primary schools could play a more important role in fostering healthy eating habits among children. The school food policy could be improved by clearly formulating food rules, simplifying supervision of the food rules, and defining how to enforce the food rules. In addition, the school food policy will only influence children's dietary behaviour if both the school and the parents support the policy."
+  },
+  {
+    "id": 3,
+    "pmid": "18719011",
+    "category": "\ud83e\udd57 Food, Nutrition & Weight",
+    "topic": "Childhood Overweight vs Adult Obesity",
+    "question": "Do overweight children necessarily make overweight adults?",
+    "decision": "no",
+    "summary": "An overweight birth cohort in childhood does not necessarily continue to be overweight in young adulthood. Not only secular trends in body mass index at fixed ages but also growth curves for wide age ranges by birth cohorts should be considered to study obesity and thinness. Growth curves by birth cohorts were produced by a repeated cross sectional annual survey over nearly six decades."
+  },
+  {
+    "id": 4,
+    "pmid": "16266387",
+    "category": "\ud83e\udd57 Food, Nutrition & Weight",
+    "topic": "Fast Food & Asthma Risk",
+    "question": "Fast foods - are they a risk factor for asthma?",
+    "decision": "yes",
+    "summary": "Frequent consumption of hamburgers showed a dose-dependent association with asthma symptoms, and frequent takeaway consumption showed a similar association with BHR."
+  },
+  {
+    "id": 5,
+    "pmid": "22668852",
+    "category": "\ud83e\udd57 Food, Nutrition & Weight",
+    "topic": "Metabolic Rate & Weight Maintenance",
+    "question": "Do African American women require fewer calories to maintain weight?",
+    "decision": "no",
+    "summary": "These results do not support the view that AA women are at greater risk for obesity because they require fewer calories to maintain weight."
+  },
+  {
+    "id": 6,
+    "pmid": "18801797",
+    "category": "\ud83e\udd57 Food, Nutrition & Weight",
+    "topic": "Food Shopping & Fruit/Veggie Consumption",
+    "question": "Household and food shopping environments: do they play a role in socioeconomic inequalities in fruit and vegetable consumption?",
+    "decision": "no",
+    "summary": "Improving access to FV in the household and food shopping environments will only make a small contribution to improving population consumption levels, and may only have a limited effect in reducing socioeconomic inequalities in their consumption."
+  },
+  {
+    "id": 7,
+    "pmid": "17971187",
+    "category": "\ud83e\udd57 Food, Nutrition & Weight",
+    "topic": "Childhood Cholesterol Screening",
+    "question": "Cholesterol screening in school children: is family history reliable to choose the ones to screen?",
+    "decision": "no",
+    "summary": "We suggest that regardless of family history, all children over 5 years should be screened for hyperlipidemia. Education about hyperlipidemia and precautions for its complications should be given to both children and families. The best and easiest way to reach children is to screen them at schools. School is also a good place for education of children about hyperlipidemia and risk factors."
+  },
+  {
+    "id": 8,
+    "pmid": "25079920",
+    "category": "\ud83e\udd57 Food, Nutrition & Weight",
+    "topic": "Parental Recall of BMI Screening",
+    "question": "Do parents recall and understand children's weight status information after BMI screening?",
+    "decision": "maybe",
+    "summary": "While parents remember that their child's body mass index is higher than recommended, they are unable to remember much of the information and advice provided about the result."
+  },
+  {
+    "id": 9,
+    "pmid": "15095519",
+    "category": "\ud83e\udd57 Food, Nutrition & Weight",
+    "topic": "Dietitian vs Nurse Diabetes Guidance",
+    "question": "Are patients with diabetes receiving the same message from dietitians and nurses?",
+    "decision": "no",
+    "summary": "Although some differences existed, RD and RN CDEs are making similar overall recommendations in the treatment of individuals with diabetes."
+  },
+  {
+    "id": 10,
+    "pmid": "21739621",
+    "category": "\ud83e\udd57 Food, Nutrition & Weight",
+    "topic": "Obesity as Predictor of Knee Pain",
+    "question": "Does obesity predict knee pain over fourteen years in women, independently of radiographic changes?",
+    "decision": "yes",
+    "summary": "Over 14 years, a higher BMI predicts knee pain at Y15 in women, independently of radiographic knee OA. When adjusted, the association was significant in bilateral, not unilateral, knee pain, suggesting alternative pathologic mechanisms may exist. The longitudinal effect of BMI on knee pain at Y15 is equally important at any time point, which may assist reducing the population burden of knee pain."
+  },
+  {
+    "id": 11,
+    "pmid": "18403944",
+    "category": "\ud83e\udd57 Food, Nutrition & Weight",
+    "topic": "Long-term Gluten Tolerance in Celiac Disease",
+    "question": "Gluten tolerance in adult patients with celiac disease 20 years after diagnosis?",
+    "decision": "maybe",
+    "summary": "Development of tolerance to gluten seems possible in some patients with CD. Further follow-up will show whether this tolerance is permanent or only a long-term return to latency. This feature may be associated with genetic characteristics, especially with HLA genotypes that differ from DQ2 or DQ8. More insight into the mechanisms of the development of gluten tolerance may help to distinguish those CD patients that might not require life-long GFD."
+  },
+  {
+    "id": 12,
+    "pmid": "20684175",
+    "category": "\ud83e\udd57 Food, Nutrition & Weight",
+    "topic": "Vitamin D Supplementation in Healthy Adults",
+    "question": "Vitamin D supplementation and regulatory T cells in apparently healthy subjects: vitamin D treatment for autoimmune diseases?",
+    "decision": "yes",
+    "summary": "Vitamin D supplementation was associated with significantly increased %Tregs in apparently healthy individuals. This immunomodulatory effect of vitamin D might underlie the associations of vitamin D deficiency and autoimmune diseases. Hence, our finding provides a rationale for further studies to investigate vitamin D effects on autoimmunological processes."
+  },
+  {
+    "id": 13,
+    "pmid": "17559449",
+    "category": "\ud83e\udd57 Food, Nutrition & Weight",
+    "topic": "Sugar-Free Medicines & Dental Erosion",
+    "question": "Are sugars-free medicines more erosive than sugars-containing medicines?",
+    "decision": "no",
+    "summary": "Paediatric SF medicines were not more erosive than SC medicines in vitro; a more significant predictor of their erosive potential was dose form."
+  },
+  {
+    "id": 14,
+    "pmid": "22658587",
+    "category": "\ud83c\udfc3 Exercise, Fitness & Movement",
+    "topic": "Exercising at an Intensity that Feels \"Good\"",
+    "question": "Affect-regulated exercise intensity: does training at an intensity that feels 'good' improve physical health?",
+    "decision": "yes",
+    "summary": "Affect-regulated exercise to feel 'good' can be used in a training programme to regulate exercise intensity. This approach led to a 19% increase in time to reach ventilatory threshold, which is indicative of improved fitness."
+  },
+  {
+    "id": 15,
+    "pmid": "17224424",
+    "category": "\ud83c\udfc3 Exercise, Fitness & Movement",
+    "topic": "Gender Differences in Exercise Heart Response",
+    "question": "Effects of exercise training on heart rate and QT interval in healthy young individuals: are there gender differences?",
+    "decision": "yes",
+    "summary": "The results of this study suggest that the cardiovascular response to exercise training may be different in men and women. Women may benefit more from interventions aimed to increase physical activity as a tool for prevention of cardiovascular morbidity and mortality."
+  },
+  {
+    "id": 16,
+    "pmid": "26363639",
+    "category": "\ud83c\udfc3 Exercise, Fitness & Movement",
+    "topic": "Daily Aerobic Workload & Blood Pressure",
+    "question": "Is aerobic workload positively related to ambulatory blood pressure?",
+    "decision": "yes",
+    "summary": "Because workers may have an elevated relative aerobic workload for several hours each working day, this relationship may elucidate a mechanism behind the increased risk for cardiovascular disease among workers exposed to high levels of occupational physical activity."
+  },
+  {
+    "id": 17,
+    "pmid": "26556589",
+    "category": "\ud83c\udfc3 Exercise, Fitness & Movement",
+    "topic": "Distance Running (10 km) & Tendon Response",
+    "question": "Does type 1 diabetes mellitus affect Achilles tendon response to a 10\u00a0km run?",
+    "decision": "no",
+    "summary": "Active individuals with T1DM do not have a heightened Achilles tendon response to load, which suggests no increased risk of tendon injury. We cannot extrapolate these findings to sedentary individuals with T1DM."
+  },
+  {
+    "id": 18,
+    "pmid": "17076091",
+    "category": "\ud83c\udfc3 Exercise, Fitness & Movement",
+    "topic": "Sleep Apnea & Aerobic Fitness",
+    "question": "Does obstructive sleep apnea affect aerobic fitness?",
+    "decision": "maybe",
+    "summary": "Overall, in a US Air Force population, OSA does not predict a decrease in aerobic fitness as measured by cycle ergometry. However, patients with an apnea-hypopnea index of greater than 20 have a statistically significant decrease in aerobic fitness compared to the normal population. This study demonstrates the effects of OSA on aerobic fitness. Further correlation of fitness testing results with OSA severity and treatment is needed."
+  },
+  {
+    "id": 19,
+    "pmid": "15787677",
+    "category": "\ud83c\udfc3 Exercise, Fitness & Movement",
+    "topic": "Aerobic Fitness & Microvascular Health",
+    "question": "Does aerobic fitness influence microvascular function in healthy adults at risk of developing Type 2 diabetes?",
+    "decision": "maybe",
+    "summary": "In this 'at-risk' group with skin microvascular dysfunction maximal oxygen uptake was not reduced compared with healthy controls. However, in the 'at-risk' group alone, individuals with higher levels of aerobic fitness also had better microvascular and endothelial responsiveness."
+  },
+  {
+    "id": 20,
+    "pmid": "26044262",
+    "category": "\ud83c\udfc3 Exercise, Fitness & Movement",
+    "topic": "Active Travel (Walking/Cycling) & Environment",
+    "question": "Are income-related differences in active travel associated with physical environmental characteristics?",
+    "decision": "no",
+    "summary": "The socio-economic gradient in active travel seems independent of physical environmental characteristics. Whilst more affluent populations enjoy advantages on some health outcomes, they will still benefit from increasing their levels of physical activity through active travel. Benefits of active travel to the whole community would include reduced vehicle emissions, reduced carbon consumption, the preservation or enhancement of infrastructure and the presentation of a 'normalised' behaviour."
+  },
+  {
+    "id": 21,
+    "pmid": "28359277",
+    "category": "\ud83c\udfc3 Exercise, Fitness & Movement",
+    "topic": "Healthy Lifestyle & Healthcare Usage",
+    "question": "Do healthier lifestyles lead to less utilization of healthcare resources?",
+    "decision": "no",
+    "summary": "Healthy lifestyles lead to an increase in the utilization of preventive health services. However, there is not much significantly reducing the number of outpatient visits in people with health behaviors. Specifically, people with regular exercise habits and who take their blood pressure measurement regularly have an increased number of outpatient visits. It is suggested that more available and accessible health consultation services be provided to inculcate in the general public the importance of maintaining a healthy lifestyle."
+  },
+  {
+    "id": 22,
+    "pmid": "26200172",
+    "category": "\ud83c\udfc3 Exercise, Fitness & Movement",
+    "topic": "Biofeedback & Athletic Sports Performance",
+    "question": "Can biofeedback training of psychophysiological responses enhance athletes' sport performance?",
+    "decision": "yes",
+    "summary": "One year following completion of the training program, all participants from the experimental group indicated that they were still using the biofeedback - psycho-regulation skills. Furthermore, these participants uniformly reported believing that these skills had enhanced their athletic performance and general well-being."
+  },
+  {
+    "id": 23,
+    "pmid": "12690589",
+    "category": "\ud83c\udfc3 Exercise, Fitness & Movement",
+    "topic": "Physical Training & Aging Muscle Fatigue",
+    "question": "Can continuous physical training counteract aging effect on myoelectric fatigue?",
+    "decision": "yes",
+    "summary": "It appears possible that aging skeletal muscles subjected to continuous exercise develop an adaptive response that counteracts the selective loss of type II muscle fibers usually observed in the muscles of elderly sedentary subjects. Our results suggest that physical activity could be considered in the elderly within a broad rehabilitative framework in which appropriate and even tailored physical training could be planned to counteract the physiologic effects of aging on muscle fiber distribution."
+  },
+  {
+    "id": 24,
+    "pmid": "15388567",
+    "category": "\ud83c\udfc3 Exercise, Fitness & Movement",
+    "topic": "Sports Medicine Research Practicality",
+    "question": "Are sports medicine journals relevant and applicable to practitioners and athletes?",
+    "decision": "no",
+    "summary": "There is a dearth of studies addressing diagnostic and treatment interventions in the sports medicine literature. The evidence base for sports medicine must continue to increase in terms of volume and quality."
+  },
+  {
+    "id": 25,
+    "pmid": "12094116",
+    "category": "\ud83c\udfc3 Exercise, Fitness & Movement",
+    "topic": "Muscle Power & Agility Sprinting Speed",
+    "question": "Is muscle power related to running speed with changes of direction?",
+    "decision": "yes",
+    "summary": "The relationships between leg muscle power and change-of-direction speed were not consistent. Reactive strength as measured by the drop jump appears to have some importance for lateral change-of-direction speed, possibly because of similar push-off actions. It was concluded that reactive strength of the leg extensor muscles has some importance in change-of-direction performance but the other technical and perceptual factors than influence agility performance should also be considered."
+  },
+  {
+    "id": 26,
+    "pmid": "22849512",
+    "category": "\ud83c\udfc3 Exercise, Fitness & Movement",
+    "topic": "Local Sports Facilities & Youth Participation",
+    "question": "Are neighbourhood social capital and availability of sports facilities related to sports participation among Dutch adolescents?",
+    "decision": "maybe",
+    "summary": "The results of this study indicate that leisure time sports participation is associated with levels of NSC, but not with availability of parks or sports facilities. In addition, NSC and availability of parks in the zip code area interacted in such a way that leisure time sports participation is most likely among adolescents living in zip code areas with higher levels of NSC, and higher availability of parks. Hence, availability of parks appears only to be important for leisure time sports participation when NSC is high."
+  },
+  {
+    "id": 27,
+    "pmid": "19694846",
+    "category": "\ud83d\ude34 Sleep, Fatigue & Nighttime Rest",
+    "topic": "Workplace Leadership & Employee Sleep Quality",
+    "question": "Does self-efficacy mediate the relationship between transformational leadership behaviours and healthcare workers' sleep quality?",
+    "decision": "maybe",
+    "summary": "Our results indicate that training managers in transformational leadership behaviours may have a positive impact on healthcare workers' health over time. However, more research is needed to examine the mechanisms by which transformational leadership brings about improved sleep quality; self-efficacy was not found to be the explanation."
+  },
+  {
+    "id": 28,
+    "pmid": "24235894",
+    "category": "\ud83d\ude34 Sleep, Fatigue & Nighttime Rest",
+    "topic": "First-Night Effect on Teeth Grinding (Bruxism)",
+    "question": "Is there a first night effect on sleep bruxism?",
+    "decision": "no",
+    "summary": "The results showed no overall first night effect on severity of RMMA frequency in young and healthy patients with SB. In clinical practice, one-night sleep recording may be sufficient for moderate-high frequency SB patients. However, low RMMA frequency in the first night could be confirmed by a second night based on the patient's medical and dental history."
+  },
+  {
+    "id": 29,
+    "pmid": "23386371",
+    "category": "\ud83d\ude34 Sleep, Fatigue & Nighttime Rest",
+    "topic": "CPAP for Sleep Quality & Quality of Life",
+    "question": "CPAP therapy in patients with idiopathic pulmonary fibrosis and obstructive sleep apnea: does it offer a better quality of life and sleep?",
+    "decision": "maybe",
+    "summary": "Effective CPAP treatment in IPF patients with OSA results in a significant improvement in daily living activities based on the FOSQ, namely an OSA-specific follow-up instrument. Improvement was also noted in other questionnaires assessing quality of life, though not to a statistically significant degree, probably because of the multifactorial influences of IPF on physical and mental health. The probability of poor CPAP compliance was high and could only be eliminated with intense follow-up by the CPAP clinic staff."
+  },
+  {
+    "id": 30,
+    "pmid": "16735905",
+    "category": "\ud83d\ude34 Sleep, Fatigue & Nighttime Rest",
+    "topic": "Sleep Apnea Severity & CPAP Pressure Needs",
+    "question": "Does the severity of obstructive sleep apnea predict patients requiring high continuous positive airway pressure?",
+    "decision": "maybe",
+    "summary": "Severe OSA patients are much more likely to need high CPAP levels. However, because of the low positive predictive value (only 28.6%), the clinical value of such information is limited. ESS and MSLT did not increase the predictive value for the need for high CPAP."
+  },
+  {
+    "id": 31,
+    "pmid": "20297950",
+    "category": "\ud83d\ude34 Sleep, Fatigue & Nighttime Rest",
+    "topic": "Medication Role in Sleep Apnea Syndrome",
+    "question": "Proof of concept study: does fenofibrate have a role in sleep apnoea syndrome?",
+    "decision": "yes",
+    "summary": "The consistent direction of change in sleep indices in this proof-of-concept study may support further investigation of fenofibrate in moderate to severe sleep apnoea syndrome."
+  },
+  {
+    "id": 32,
+    "pmid": "26852225",
+    "category": "\ud83d\ude34 Sleep, Fatigue & Nighttime Rest",
+    "topic": "Self-Reporting Differences in Sleep Disorders",
+    "question": "Is adjustment for reporting heterogeneity necessary in sleep disorders?",
+    "decision": "no",
+    "summary": "Sleep disorders are common in the general adult population of Japan. Correction for reporting heterogeneity using anchoring vignettes is not a necessary tool for proper management of sleep and energy related problems among Japanese adults. Older age, gender differences in communicating sleep-related problems, the presence of multiple morbidities, and regular exercise should be the focus of policies and clinical practice to improve sleep and energy management in Japan."
+  },
+  {
+    "id": 33,
+    "pmid": "16991071",
+    "category": "\ud83d\ude34 Sleep, Fatigue & Nighttime Rest",
+    "topic": "Physical Strain & Rotator Cuff Tears",
+    "question": "Rotator cuff tear--an occupational disease?",
+    "decision": "yes",
+    "summary": "Our data suggest that working exposure increases the risk or leads to the clinical manifestation of rotator cuff tears. Although a detailed analysis of individual physical exposure is not available yet, the statistical results indicate that rotator cuff tears must be taken into consideration as a result of ergonomic exposure."
+  },
+  {
+    "id": 34,
+    "pmid": "21880023",
+    "category": "\ud83e\udde0 Mental Health, Mood & Stress",
+    "topic": "Exercise During Pregnancy & Postnatal Depression",
+    "question": "Does exercise during pregnancy prevent postnatal depression?",
+    "decision": "no",
+    "summary": "We did not find a lower prevalence of high EPDS scores among women randomized to regular exercise during pregnancy compared with the control group. However, a subgroup of women in the intervention group who did not exercise regularly prior to pregnancy had a reduced risk of postnatal depression."
+  },
+  {
+    "id": 35,
+    "pmid": "27643961",
+    "category": "\ud83e\udde0 Mental Health, Mood & Stress",
+    "topic": "Depression & Alcohol Use in Adolescents",
+    "question": "Major depression and alcohol use disorder in adolescence: Does comorbidity lead to poorer outcomes of depression?",
+    "decision": "no",
+    "summary": "The results of these analyses suggest that marginally higher rates of depression to age 35 amongst the comorbid MD/AUD group were explained by increased exposure to adverse childhood circumstances amongst members of the comorbid group. Adolescent MD/AUD comorbidity is likely to be a risk marker, rather than a causal factor in subsequent MD."
+  },
+  {
+    "id": 36,
+    "pmid": "12920330",
+    "category": "\ud83e\udde0 Mental Health, Mood & Stress",
+    "topic": "Physical Aches/Complaints & Future Depression",
+    "question": "Do somatic complaints predict subsequent symptoms of depression?",
+    "decision": "maybe",
+    "summary": "Our findings suggest that somatic complaints may represent one, but not necessarily the most important, risk factor for the subsequent development of depressive symptoms in women in nonclinical populations. The results also highlight the importance of including social variables in studies on women's depression as well as conducting additional research to further examine predictors of depressive symptoms in men."
+  },
+  {
+    "id": 37,
+    "pmid": "23497210",
+    "category": "\ud83e\udde0 Mental Health, Mood & Stress",
+    "topic": "Identifying Maternal Depression in Health Data",
+    "question": "Are women with major depression in pregnancy identifiable in population health data?",
+    "decision": "no",
+    "summary": "No single data source is likely to provide a complete health profile for an individual. For women with depression in pregnancy and dispensed antidepressants, the hospital admission data do not adequately capture all cases."
+  },
+  {
+    "id": 38,
+    "pmid": "23228527",
+    "category": "\ud83e\udde0 Mental Health, Mood & Stress",
+    "topic": "Music for Stress Relief",
+    "question": "Does music influence stress in mechanically ventilated patients?",
+    "decision": "no",
+    "summary": "While music did not significantly reduce cortisol, less profound spikes in UFC levels were observed but that, given the limitations of the research, this observation could have occurred merely by chance."
+  },
+  {
+    "id": 39,
+    "pmid": "24014276",
+    "category": "\ud83e\udde0 Mental Health, Mood & Stress",
+    "topic": "Optimism & Survival in Advanced Age",
+    "question": "Optimism and survival: does an optimistic outlook predict better survival at advanced ages?",
+    "decision": "yes",
+    "summary": "An optimistic outlook appears to be a significant predictor of survival among the oldest-old women. It may also be a significant predictor for men but the sample size is small."
+  },
+  {
+    "id": 40,
+    "pmid": "24747511",
+    "category": "\ud83e\udde0 Mental Health, Mood & Stress",
+    "topic": "Emotional Memory Processing in Depression",
+    "question": "Updating emotional content in working memory: a depression-specific deficit?",
+    "decision": "yes",
+    "summary": "The results indicate that difficulties removing irrelevant material from working memory might be unique to depression, and the ability to inhibit irrelevant information is relatively preserved in social anxiety disorder."
+  },
+  {
+    "id": 41,
+    "pmid": "23025584",
+    "category": "\ud83e\udde0 Mental Health, Mood & Stress",
+    "topic": "Stress & Social Mimicry of Drinking",
+    "question": "Does stress increase imitation of drinking behavior?",
+    "decision": "no",
+    "summary": "Generally, it appears that among young male adults, imitation of alcohol consumption is a robust phenomenon not dependent on individual stress levels."
+  },
+  {
+    "id": 42,
+    "pmid": "9363529",
+    "category": "\ud83e\udde0 Mental Health, Mood & Stress",
+    "topic": "Psychological Distress & Long-Term Disability",
+    "question": "Does psychological distress predict disability?",
+    "decision": "yes",
+    "summary": "Psychological distress is an independent risk factor for disability. Its predictive significance varies between disorders leading to functional deterioration. The association mechanisms are likely to vary from one disorder to another."
+  },
+  {
+    "id": 43,
+    "pmid": "19156007",
+    "category": "\ud83e\udde0 Mental Health, Mood & Stress",
+    "topic": "Depression Screening in Vision Loss",
+    "question": "Can clinicians use the PHQ-9 to assess depression in people with vision loss?",
+    "decision": "yes",
+    "summary": "Our findings demonstrate that the PHQ-9, when scaled with Rasch analysis, forms a linear interval measurement of depressive symptoms suitable for use in a vision impaired population."
+  },
+  {
+    "id": 44,
+    "pmid": "22303473",
+    "category": "\ud83e\udde0 Mental Health, Mood & Stress",
+    "topic": "Support Meetings for Caregivers of Dementia Patients",
+    "question": "Does a family meetings intervention prevent depression and anxiety in family caregivers of dementia patients?",
+    "decision": "no",
+    "summary": "This study did not demonstrate preventive effects of family meetings on the mental health of family caregivers. Further research should determine whether this intervention might be more beneficial if provided in a more concentrated dose, when applied for therapeutic purposes or targeted towards subgroups of caregivers."
+  },
+  {
+    "id": 45,
+    "pmid": "25691513",
+    "category": "\ud83e\udde0 Mental Health, Mood & Stress",
+    "topic": "Communication Impairments & Musical Messages",
+    "question": "Do communication disorders extend to musical messages?",
+    "decision": "yes",
+    "summary": "Conveyance of emotions or movements through music may be decoded differently by persons with different types of communication disorders. Because music is the primary therapeutic tool in music therapy sessions, clinicians should consider these differential abilities when selecting music for clinical interventions focusing on emotions or movement."
+  },
+  {
+    "id": 46,
+    "pmid": "27448572",
+    "category": "\ud83e\udde0 Mental Health, Mood & Stress",
+    "topic": "Psychological Therapy Duration & Relapse",
+    "question": "Is duration of psychological treatment for depression related to return into treatment?",
+    "decision": "yes",
+    "summary": "The results suggest that a longer duration of treatment may prevent return into mental health care in some groups. However, because of the design of the study, no causal inference can be drawn. Further research, preferably in a RCT, is needed to determine whether the trend towards lower intensity treatments is associated with repeated mental health care use."
+  },
+  {
+    "id": 47,
+    "pmid": "18832500",
+    "category": "\ud83e\udde0 Mental Health, Mood & Stress",
+    "topic": "Patient-Rated Depression Monitoring Feasibility",
+    "question": "Systematic use of patient-rated depression severity monitoring: is it helpful and feasible in clinical psychiatry?",
+    "decision": "yes",
+    "summary": "The study findings suggest that adopting measurement-based care, such as using the PHQ-9, is achievable, even in practices with limited resources."
+  },
+  {
+    "id": 48,
+    "pmid": "24019262",
+    "category": "\ud83e\ude79 Pain, Headaches & Everyday Physical Symptoms",
+    "topic": "Hypertension & Chronic Low Back Pain",
+    "question": "Does high blood pressure reduce the risk of chronic low back pain?",
+    "decision": "yes",
+    "summary": "Results for low back pain are consistent with the theory of hypertension-associated hypalgesia, predicting diminished pain sensitivity with increasing blood pressure, possibly with modified reactions in people suffering from long-lasting pain."
+  },
+  {
+    "id": 49,
+    "pmid": "18005142",
+    "category": "\ud83e\ude79 Pain, Headaches & Everyday Physical Symptoms",
+    "topic": "Early Migraine Treatment & Headache Severity",
+    "question": "Does early migraine treatment shorten time to headache peak and reduce its severity?",
+    "decision": "yes",
+    "summary": "Early treatment and use of triptans may lead to shorter duration from migraine headache onset to its peak but did not alleviate headache severity at peak. This could result in decreased migraine burden by reducing total migraine headache duration."
+  },
+  {
+    "id": 50,
+    "pmid": "20842006",
+    "category": "\ud83e\ude79 Pain, Headaches & Everyday Physical Symptoms",
+    "topic": "Acupuncture Needle Count for Neck Pain",
+    "question": "Neck pain treatment with acupuncture: does the number of needles matter?",
+    "decision": "no",
+    "summary": "For this pathology, the number of needles, 5 or 11, seems not to be an important variable in determining the therapeutic effect when the time of stimulation is the same in the two groups."
+  },
+  {
+    "id": 51,
+    "pmid": "25499207",
+    "category": "\ud83e\ude79 Pain, Headaches & Everyday Physical Symptoms",
+    "topic": "Neck Pain & 6-Month Quality of Life",
+    "question": "Is neck pain associated with worse health-related quality of life 6 months later?",
+    "decision": "yes",
+    "summary": "We found that neck pain was negatively associated with physical but not mental HRQoL. Our analysis suggests that neck pain may be a contributor of future poor physical HRQoL in the population. Raising awareness of the possible future impact of neck pain on physical HRQoL is important for health-care providers and policy makers with respect to the management of neck pain in populations."
+  },
+  {
+    "id": 52,
+    "pmid": "21951591",
+    "category": "\ud83e\ude79 Pain, Headaches & Everyday Physical Symptoms",
+    "topic": "Pain Beliefs & Movement in Low Back Pain",
+    "question": "Motor performance in chronic low back pain: is there an influence of pain-related cognitions?",
+    "decision": "yes",
+    "summary": "It can be concluded that CLBP patients in general have worse motor task performance compared to healthy subjects and that provoking pain-related cognitions further worsened performance."
+  },
+  {
+    "id": 53,
+    "pmid": "23495128",
+    "category": "\ud83e\ude79 Pain, Headaches & Everyday Physical Symptoms",
+    "topic": "Describing Arthritis Pain with Colors",
+    "question": "The colour of pain: can patients use colour to describe osteoarthritis pain?",
+    "decision": "yes",
+    "summary": "For some patients, using colour to describe their pain experience may be a useful tool to improve doctor-patient communication."
+  },
+  {
+    "id": 54,
+    "pmid": "23252468",
+    "category": "\ud83e\ude79 Pain, Headaches & Everyday Physical Symptoms",
+    "topic": "Migraine Sufferers & Visual Attention",
+    "question": "Do episodic migraineurs selectively attend to headache-related visual stimuli?",
+    "decision": "no",
+    "summary": "In light of the large sample size and prior pilot testing of presented images, results suggest that episodic migraineurs do not differentially attend to headache-related facial stimuli. Given modest evidence of attentional biases among chronic headache samples, these findings suggest potential differences in attentional processing between chronic and episodic headache subforms."
+  },
+  {
+    "id": 55,
+    "pmid": "14872327",
+    "category": "\ud83e\ude79 Pain, Headaches & Everyday Physical Symptoms",
+    "topic": "Pain Prevalence in Adult Mental Health",
+    "question": "Is pain a clinically relevant problem in general adult psychiatry?",
+    "decision": "yes",
+    "summary": "We found evidence that pain can be a significant clinical problem in psychiatric patients which seems to be underestimated in psychiatry. The investigated patients in general adult psychiatry are characterized by specific risk factors different from clinical subpopulations of other disciplines."
+  },
+  {
+    "id": 56,
+    "pmid": "17453263",
+    "category": "\ud83e\ude79 Pain, Headaches & Everyday Physical Symptoms",
+    "topic": "Racial Disparities in Asthma Severity Estimates",
+    "question": "Are physician estimates of asthma severity less accurate in black than in white patients?",
+    "decision": "yes",
+    "summary": "Biased estimates of asthma severity may contribute to racially disparate asthma care. Interventions to improve physicians' assessments of asthma severity and patient-physician communication may minimize racial disparities in asthma care."
+  },
+  {
+    "id": 57,
+    "pmid": "23283159",
+    "category": "\ud83e\ude79 Pain, Headaches & Everyday Physical Symptoms",
+    "topic": "Adolescent Obesity & Wheezing Symptoms",
+    "question": "Is obesity a risk factor for wheezing among adolescents?",
+    "decision": "yes",
+    "summary": "Since obesity at the start of adolescence is associated with asthma symptom persistence, prevention and treatment of obesity may reduce avoidable healthcare costs and disease burden."
+  },
+  {
+    "id": 58,
+    "pmid": "11943048",
+    "category": "\ud83e\ude79 Pain, Headaches & Everyday Physical Symptoms",
+    "topic": "Hospice Care & End-of-Life Pain Management",
+    "question": "Does receipt of hospice care in nursing homes improve the management of pain at the end of life?",
+    "decision": "yes",
+    "summary": "Findings suggest that analgesic management of daily pain is better for nursing home residents enrolled in hospice than for those not enrolled in hospice.The prescribing practices portrayed by this study reveal that many dying nursing home residents in daily pain are receiving no analgesic treatment or are receiving analgesic treatment inconsistent with AMDA and other pain management guidelines. Improving the analgesic management of pain in nursing homes is essential if high-quality end-of-life care in nursing homes is to be achieved."
+  },
+  {
+    "id": 59,
+    "pmid": "21256734",
+    "category": "\ud83e\ude79 Pain, Headaches & Everyday Physical Symptoms",
+    "topic": "Initial Pain Intensity & Pain Relief Response",
+    "question": "Does pain intensity predict a poor opioid response in cancer patients?",
+    "decision": "no",
+    "summary": "Baseline pain intensity does not predict the outcome after an appropriate opioid titration. It is likely that non-homogeneous pain treatment would have biased the outcome of a previous work."
+  },
+  {
+    "id": 60,
+    "pmid": "23414523",
+    "category": "\ud83d\udc76 Pregnancy, Parenting & Child Health",
+    "topic": "Early Pregnancy Binge Drinking & Child Development",
+    "question": "Does binge drinking during early pregnancy increase the risk of psychomotor deficits?",
+    "decision": "no",
+    "summary": "In this study, we found no systematic association between isolated episodes of binge drinking during early pregnancy and child motor function at age 5."
+  },
+  {
+    "id": 61,
+    "pmid": "8375607",
+    "category": "\ud83d\udc76 Pregnancy, Parenting & Child Health",
+    "topic": "Breastfeeding with Family History of Allergies",
+    "question": "Is the breast best for children with a family history of atopy?",
+    "decision": "yes",
+    "summary": "Our results suggest a protective effect of breast-feeding among children with a family history of atopy that is not confined to the period of breast-feeding but continues during the first three years of life. Breast-feeding should be promoted in children with a family history of atopy."
+  },
+  {
+    "id": 62,
+    "pmid": "23539689",
+    "category": "\ud83d\udc76 Pregnancy, Parenting & Child Health",
+    "topic": "Children's Cold Medication Use Post-FDA Warnings",
+    "question": "Cold preparation use in young children after FDA warnings: do concerns still exist?",
+    "decision": "yes",
+    "summary": "Despite current recommendations, cough and cold medicines are still used in children younger than 6 years of age. A significant portion of caregivers report that they are still unaware of public warnings, potential side effects, and interactions with other medications."
+  },
+  {
+    "id": 63,
+    "pmid": "18607272",
+    "category": "\ud83d\udc76 Pregnancy, Parenting & Child Health",
+    "topic": "Body Image Perception: Parents vs Children vs Doctors",
+    "question": "Body perception: do parents, their children, and their children's physicians perceive body image differently?",
+    "decision": "yes",
+    "summary": "Many children underestimated their degree of overweight. Their parents and even their attending physicians shared this misperception. This study demonstrates the need to further educate physicians to recognize obesity and overweight so that they can counsel children and their families."
+  },
+  {
+    "id": 64,
+    "pmid": "26215326",
+    "category": "\ud83d\udc76 Pregnancy, Parenting & Child Health",
+    "topic": "Prior Preterm Birth & Subsequent Pregnancy Risk",
+    "question": "Does the clinical presentation of a prior preterm birth predict risk in a subsequent pregnancy?",
+    "decision": "yes",
+    "summary": "Patients with a history of ACD are at an increased risk of having recurrent preterm birth and cervical shortening in a subsequent pregnancy compared with women with prior preterm birth associated PPROM or PTL."
+  },
+  {
+    "id": 65,
+    "pmid": "20354380",
+    "category": "\ud83d\udc76 Pregnancy, Parenting & Child Health",
+    "topic": "Career Pressures & Childbearing Delay",
+    "question": "Do women residents delay childbearing due to perceived career threats?",
+    "decision": "yes",
+    "summary": "Women residents intentionally postpone pregnancy because of perceived threats to their careers. Medical educators should be aware of these findings when counseling female trainees."
+  },
+  {
+    "id": 66,
+    "pmid": "16241924",
+    "category": "\ud83d\udc76 Pregnancy, Parenting & Child Health",
+    "topic": "Number of Pregnancies & Insulin Resistance",
+    "question": "Does parity increase insulin resistance during pregnancy?",
+    "decision": "no",
+    "summary": "Parity is not directly linked to insulin sensitivity deterioration, to CP/FPG increase during pregnancy, or to GDM appearance, although it is linked through the mediation of progressive ageing and weight gain either before or during pregnancy, when there is a sufficiently long time interval between pregnancies."
+  },
+  {
+    "id": 67,
+    "pmid": "23048048",
+    "category": "\ud83d\udc76 Pregnancy, Parenting & Child Health",
+    "topic": "ADHD & Protective Mother-Child Relationship",
+    "question": "Risky sexual behavior among college students With ADHD: is the mother-child relationship protective?",
+    "decision": "yes",
+    "summary": "Results suggest that female college students with ADHD are at risk for unprotected sex. Moreover, a positive mother-child relationship may be protective for college students with ADHD in relation to RSB."
+  },
+  {
+    "id": 68,
+    "pmid": "16647887",
+    "category": "\ud83d\udc76 Pregnancy, Parenting & Child Health",
+    "topic": "Treated Hypothyroidism & Pregnancy Complications",
+    "question": "Are women who are treated for hypothyroidism at risk for pregnancy complications?",
+    "decision": "no",
+    "summary": "Compared with patients without hypothyroidism, patients with treated hypothyroidism are not at any increased risk for perinatal morbidity."
+  },
+  {
+    "id": 69,
+    "pmid": "21669959",
+    "category": "\ud83d\udc76 Pregnancy, Parenting & Child Health",
+    "topic": "Secondhand Smoke Exposure in Vulnerable Infants",
+    "question": "Secondhand smoke risk in infants discharged from an NICU: potential for significant health disparities?",
+    "decision": "yes",
+    "summary": "The most disadvantaged families were least likely to have protective health behaviors in place to reduce SHSe and, consequently, are most at-risk for tobacco exposure and subsequent tobacco-related health disparities. Innovative SHSe interventions for this vulnerable population are sorely needed."
+  },
+  {
+    "id": 70,
+    "pmid": "26370095",
+    "category": "\ud83d\udc76 Pregnancy, Parenting & Child Health",
+    "topic": "Financial Incentives for Quitting Smoking in Pregnancy",
+    "question": "Are financial incentives cost-effective to support smoking cessation during pregnancy?",
+    "decision": "yes",
+    "summary": "Financial incentives for smoking cessation in pregnancy are highly cost-effective, with an incremental cost per quality-adjusted life years of \u00a3482, which is well below recommended decision thresholds."
+  },
+  {
+    "id": 71,
+    "pmid": "18235194",
+    "category": "\ud83d\udc76 Pregnancy, Parenting & Child Health",
+    "topic": "Early Preschool Reading/Phonics Training",
+    "question": "Is a specialised training of phonological awareness indicated in every preschool child?",
+    "decision": "maybe",
+    "summary": "A specialized training program to improve phonologic awareness as a basis for reading and writing in every kindergarten and preschool child seems to be unnecessary. However, children with temporary hearing deficits benefit from such a program. For all other children general perception training may be sufficient."
+  },
+  {
+    "id": 72,
+    "pmid": "12380309",
+    "category": "\ud83d\udc76 Pregnancy, Parenting & Child Health",
+    "topic": "Childhood Circumcision Practice Assessment",
+    "question": "Should circumcision be performed in childhood?",
+    "decision": "no",
+    "summary": "Incomplete separation between prepuce and glans penis is normal and common among new-borns, progressing until adolescence to spontaneous separation, at which time it is complete in the majority of boys. Accordingly to the criteria we have sustained for years and present study's findings, circumcision has few indications during childhood, as well as forced prepucial dilation."
+  },
+  {
+    "id": 73,
+    "pmid": "24977765",
+    "category": "\ud83d\udc76 Pregnancy, Parenting & Child Health",
+    "topic": "Concussion Recovery & Discharge Instruction Adherence",
+    "question": "Are pediatric concussion patients compliant with discharge instructions?",
+    "decision": "yes",
+    "summary": "Pediatric patients discharged from the ED are mostly compliant with concussion instructions. However, a significant number of patients RTP on the day of injury, while experiencing symptoms or without medical clearance."
+  },
+  {
+    "id": 74,
+    "pmid": "15475728",
+    "category": "\ud83c\udf77 Alcohol, Smoking & Everyday Habits",
+    "topic": "Drinking Alcohol With Meals & Heart Attack Risk",
+    "question": "Alcohol consumption and acute myocardial infarction: a benefit of alcohol consumed with meals?",
+    "decision": "yes",
+    "summary": "Alcohol drinking during meals was inversely related with risk of acute MI, whereas alcohol drinking outside meals only was unrelated to risk."
+  },
+  {
+    "id": 75,
+    "pmid": "22350859",
+    "category": "\ud83c\udf77 Alcohol, Smoking & Everyday Habits",
+    "topic": "Graphic Warning Labels on Cigarette Packs",
+    "question": "Can pictorial warning labels on cigarette packages address smoking-related health disparities?",
+    "decision": "yes",
+    "summary": "Pictorial HWLs with didactic textual forms seem to work better than those with testimonial narratives. Future research should determine which pictorial HWL content has the greatest real-world impact among consumers from disadvantaged groups, including assessment of how HWL content should change to maintain its impact as tobacco control environments strengthen and consumer awareness of smoking-related risks increases."
+  },
+  {
+    "id": 76,
+    "pmid": "15369037",
+    "category": "\ud83c\udf77 Alcohol, Smoking & Everyday Habits",
+    "topic": "Childhood Passive Smoking & Adult Work Disability",
+    "question": "Do people who were passive smokers during childhood have increased risk of long-term work disability?",
+    "decision": "yes",
+    "summary": "The study supports the hypothesis that nurses' aides who were exposed to ETS at home during childhood have an increased risk of long-term sickness absence."
+  },
+  {
+    "id": 77,
+    "pmid": "23076787",
+    "category": "\ud83c\udf77 Alcohol, Smoking & Everyday Habits",
+    "topic": "Cigarette Taxes & Retail Price Changes",
+    "question": "Can increases in the cigarette tax rate be linked to cigarette retail prices?",
+    "decision": "no",
+    "summary": "Numerous studies have found that taxation is one of the most effective policy instruments for tobacco control. However, these findings come from countries that have market economies where market forces determine prices and influence how cigarette taxes are passed to the consumers in retail prices. China's tobacco industry is not a market economy; therefore, non-market forces and the current Chinese tobacco monopoly system determine cigarette prices. The result is that tax increases do not necessarily get passed on to the retail price."
+  },
+  {
+    "id": 78,
+    "pmid": "27615402",
+    "category": "\ud83c\udf77 Alcohol, Smoking & Everyday Habits",
+    "topic": "Family Drinking Patterns & Young Adult Habits",
+    "question": "Does the familial transmission of drinking patterns persist into young adulthood?",
+    "decision": "maybe",
+    "summary": "The association between familial drinking and offspring drinking in young adulthood exhibits clear non-linear trends. Changes in the lower part of the familial drinking distribution are strongly related to drinking in young adults, but the actual levels of drinking in drinking families appear less important in shaping the drinking patterns of the offspring in young adulthood."
+  },
+  {
+    "id": 79,
+    "pmid": "20363841",
+    "category": "\ud83c\udf77 Alcohol, Smoking & Everyday Habits",
+    "topic": "Smokers' Symptoms & Chronic Lung Disease Onset",
+    "question": "Do symptoms predict COPD in smokers?",
+    "decision": "no",
+    "summary": "COPD is underdiagnosed in the United States. Symptoms are frequent in subjects with AO and increase their risk for COPD, but add little beyond age and smoking history to the predictive value of spirometry. In view of the high prevalence of symptoms and their poor predictive value, a simpler and more effective approach would be to screen older smokers."
+  },
+  {
+    "id": 80,
+    "pmid": "17565137",
+    "category": "\ud83c\udf77 Alcohol, Smoking & Everyday Habits",
+    "topic": "Anti-Tobacco Ads & Smoking Perceptions in Youth",
+    "question": "Out of the smokescreen II: will an advertisement targeting the tobacco industry affect young people's perception of smoking in movies and their intention to smoke?",
+    "decision": "yes",
+    "summary": "This real-world study suggests that placing an antismoking advertisement before movies containing smoking scenes can help to immunise non-smokers against the influences of film stars' smoking. Caution must be exercised in the type of advertisement screened as some types of advertising may reinforce smokers' intentions to smoke."
+  },
+  {
+    "id": 81,
+    "pmid": "12006913",
+    "category": "\ud83c\udf77 Alcohol, Smoking & Everyday Habits",
+    "topic": "Cardiovascular Risk Factor Impact: Women vs Men",
+    "question": "Do lipids, blood pressure, diabetes, and smoking confer equal risk of myocardial infarction in women as in men?",
+    "decision": "no",
+    "summary": "This large study of the major risk factors compared between the sexes demonstrates similar relative risk of myocardial infarction associated with cholesterol for both sexes, however, the relative risk is higher in women for many other risk factors such as smoking, diabetes, elevated triglycerides and left ventricular hypertrophy."
+  },
+  {
+    "id": 82,
+    "pmid": "12684740",
+    "category": "\ud83c\udf77 Alcohol, Smoking & Everyday Habits",
+    "topic": "Environmental Cues & Alcohol Cravings",
+    "question": "Cue-induced behavioural activation: a novel model of alcohol craving?",
+    "decision": "yes",
+    "summary": "Cue-induced behavioural activation was specific to alcohol cues, reproducible, persistent and could be blocked by naltrexone, and its correlation with human self-report of craving makes it a potentially useful model for studying alcohol craving."
+  },
+  {
+    "id": 83,
+    "pmid": "18239988",
+    "category": "\ud83c\udf77 Alcohol, Smoking & Everyday Habits",
+    "topic": "Alcoholic vs Non-Alcoholic Liver Fatty Changes",
+    "question": "Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?",
+    "decision": "yes",
+    "summary": "Higher MCVs and AST/ALT ratios in ASH reflect the severity of underlying liver disease and do not differentiate NASH from ASH. Instead, these biomarkers might prove useful in guiding selection of patients for liver biopsy and in targeting therapy."
+  },
+  {
+    "id": 84,
+    "pmid": "21865668",
+    "category": "\ud83e\ude7a Heart, Aging, Senses & Healthcare",
+    "topic": "Automatic vs Manual Driving in Seniors",
+    "question": "Does automatic transmission improve driving behavior in older drivers?",
+    "decision": "yes",
+    "summary": "Switching to automatic transmission may be recommended for older drivers as a means to maintain safe driving and thereby the quality of their transport mobility."
+  },
+  {
+    "id": 85,
+    "pmid": "15223725",
+    "category": "\ud83e\ude7a Heart, Aging, Senses & Healthcare",
+    "topic": "Doctor vs Nurse Blood Pressure Readings (\"White Coat Effect\")",
+    "question": "Does blood pressure change in treated hypertensive patients depending on whether it is measured by a physician or a nurse?",
+    "decision": "yes",
+    "summary": "Systolic BP measured by the nurse in treated hypertensive patients is significantly lower than the readings obtained by the physician, and are almost identical to ambulatory BP monitoring. Blood pressure determination by the nurse is desirable not only for diagnosis but also to evaluate the level of control of blood pressure during the follow-up of treated hypertensive patients."
+  },
+  {
+    "id": 86,
+    "pmid": "22188074",
+    "category": "\ud83e\ude7a Heart, Aging, Senses & Healthcare",
+    "topic": "Daily Functional Activities as Early Dementia Predictors",
+    "question": "Do instrumental activities of daily living predict dementia at 1- and 2-year follow-up?",
+    "decision": "yes",
+    "summary": "IADL disability is a useful addition to the diagnostic process in a memory clinic setting, indicating who is at higher risk of developing dementia at 1- and 2-year follow-up."
+  },
+  {
+    "id": 87,
+    "pmid": "21084567",
+    "category": "\ud83e\ude7a Heart, Aging, Senses & Healthcare",
+    "topic": "Accuracy of Patient Home Blood Pressure Logs",
+    "question": "Are stroke patients' reports of home blood pressure readings reliable?",
+    "decision": "yes",
+    "summary": "This group of elderly stroke patients were able to record their BPs reliably at home. Any bias was small and would be unlikely to affect management. Since BP readings in a GP surgery are often a poor indication of true BP, GPs might consider using hypertensive patients' records of home BP monitoring to help guide treatment decisions."
+  },
+  {
+    "id": 88,
+    "pmid": "25571931",
+    "category": "\ud83e\ude7a Heart, Aging, Senses & Healthcare",
+    "topic": "Calling 911 for Stroke Warning Signs",
+    "question": "Do elderly patients call 911 when presented with clinical scenarios suggestive of acute stroke?",
+    "decision": "maybe",
+    "summary": "These results suggest the need to provide interventions that are specifically designed to increase awareness of potential stroke signs and symptoms and appropriate subsequent clinical actions."
+  },
+  {
+    "id": 89,
+    "pmid": "22513023",
+    "category": "\ud83e\ude7a Heart, Aging, Senses & Healthcare",
+    "topic": "Biological Aging in Vulnerable Populations",
+    "question": "Do Indigenous Australians age prematurely?",
+    "decision": "no",
+    "summary": "The idea that Indigenous people age prematurely is not well supported by this study of a series of discrete conditions. The current focus and type of services provided by the aged care sector may not be the best way to respond to the excessive burden of chronic disease and disability of middle-aged Indigenous people."
+  },
+  {
+    "id": 90,
+    "pmid": "22825590",
+    "category": "\ud83e\ude7a Heart, Aging, Senses & Healthcare",
+    "topic": "Lifestyle Factors in Developing Hypertension",
+    "question": "Are behavioural risk factors to be blamed for the conversion from optimal blood pressure to hypertensive status in Black South Africans?",
+    "decision": "yes",
+    "summary": "During the 5 years, 24% of Africans with optimal BP developed hypertension. The surge in hypertension in Africa is largely explained by modifiable risk factors. Public health strategies should focus aggressively on lifestyle to prevent a catastrophic burden on the national health system."
+  },
+  {
+    "id": 91,
+    "pmid": "12238307",
+    "category": "\ud83e\ude7a Heart, Aging, Senses & Healthcare",
+    "topic": "Vaccination Coverage Rates in Older Adults",
+    "question": "Vaccine protection in the elderly: are Austrian seniors adequately protected by vaccinations?",
+    "decision": "no",
+    "summary": "The data demonstrate that vaccination has a relatively weak and short-lasting effect in old age. The results of the study should stimulate discussions about strategies how vaccinations can be made more effective in old age. Improved campaigns, shortened vaccination intervals as well as the design of novel vaccines tailored to fulfill the specific demands of the aging immune system are imaginable."
+  },
+  {
+    "id": 92,
+    "pmid": "17096624",
+    "category": "\ud83e\ude7a Heart, Aging, Senses & Healthcare",
+    "topic": "Mindsets & Knowledge of Unvaccinated Seniors",
+    "question": "Do patterns of knowledge and attitudes exist among unvaccinated seniors?",
+    "decision": "yes",
+    "summary": "Findings suggest that cluster analyses may be useful in identifying groups for targeted health messages."
+  },
+  {
+    "id": 93,
+    "pmid": "22990761",
+    "category": "\ud83e\ude7a Heart, Aging, Senses & Healthcare",
+    "topic": "Resting Heart Rate as a Cardiovascular Indicator",
+    "question": "Cardiovascular risk in a rural adult West African population: is resting heart rate also relevant?",
+    "decision": "yes",
+    "summary": "Significant associations were observed between RHR and several established cardiovascular risk factors. Prospective studies are needed in sub-Saharan African populations to establish the potential value of RHR in cardiovascular risk assessment."
+  },
+  {
+    "id": 94,
+    "pmid": "10966943",
+    "category": "\ud83e\ude7a Heart, Aging, Senses & Healthcare",
+    "topic": "\"Lazy Eye\" (Amblyopia) & Permanence of Vision Loss",
+    "question": "Amblyopia: is visual loss permanent?",
+    "decision": "no",
+    "summary": "Older people with a history of amblyopia who develop visual loss in the previously normal eye can experience recovery of visual function in the amblyopic eye over a period of time. This recovery in visual function occurs in the wake of visual loss in the fellow eye and the improvement appears to be sustained."
+  },
+  {
+    "id": 95,
+    "pmid": "19664156",
+    "category": "\ud83e\ude7a Heart, Aging, Senses & Healthcare",
+    "topic": "Using Search Engines (Google) for Complex Diagnoses",
+    "question": "Search engine as a diagnostic tool in difficult immunological and allergologic cases: is Google useful?",
+    "decision": "yes",
+    "summary": "This Google-based search was useful to identify an appropriate diagnosis in complex immunological and allergic cases. Computing skills may help to get better results."
+  },
+  {
+    "id": 96,
+    "pmid": "18619710",
+    "category": "\ud83e\ude7a Heart, Aging, Senses & Healthcare",
+    "topic": "Patient Understanding of Emergency Room Instructions",
+    "question": "Patient comprehension of emergency department care and instructions: are patients aware of when they do not understand?",
+    "decision": "no",
+    "summary": "Many patients do not understand their ED care or their discharge instructions. Moreover, most patients appear to be unaware of their lack of understanding and report inappropriate confidence in their comprehension and recall."
+  },
+  {
+    "id": 97,
+    "pmid": "15000338",
+    "category": "\ud83e\ude7a Heart, Aging, Senses & Healthcare",
+    "topic": "Doctors' Awareness of Healthcare & Medication Costs",
+    "question": "Do family physicians know the costs of medical care?",
+    "decision": "no",
+    "summary": "Family doctors in British Columbia have little awareness of the costs of medical care."
+  },
+  {
+    "id": 98,
+    "pmid": "8422202",
+    "category": "\ud83e\ude7a Heart, Aging, Senses & Healthcare",
+    "topic": "Healthcare Provider Skill in Inhaler Technique",
+    "question": "Metered-dose inhalers. Do health care providers know what to teach?",
+    "decision": "no",
+    "summary": "This study confirms that a large percentage of patients use metered-dose inhalers improperly. It also demonstrates a significant lack of understanding by health care providers of the proper use of metered-dose inhalers. Furthermore, this study supports the use of respiratory care practitioners in the outpatient setting, since they were the most proficient among all the health care providers in the proper use of metered-dose inhalers."
+  },
+  {
+    "id": 99,
+    "pmid": "21823940",
+    "category": "\ud83e\ude7a Heart, Aging, Senses & Healthcare",
+    "topic": "Crash Records vs Self-Reported Driving After Stroke",
+    "question": "Department of Transportation vs self-reported data on motor vehicle collisions and driving convictions for stroke survivors: do they agree?",
+    "decision": "no",
+    "summary": "In our population of stroke survivors, self-reports of motor vehicle collisions and driving convictions differed from government records. In future studies, the use of both government and self-reported data would ensure a more accurate picture of driving safety post-stroke."
+  },
+  {
+    "id": 100,
+    "pmid": "12626177",
+    "category": "\ud83e\ude7a Heart, Aging, Senses & Healthcare",
+    "topic": "Internet Education for Youth Health Awareness",
+    "question": "Can the Internet be used to improve sexual health awareness in web-wise young people?",
+    "decision": "maybe",
+    "summary": "The Internet would be a practical and accessible way of delivering sexual health education to young people, particularly if it is incorporated into activities and websites they enjoy."
+  }
+]
