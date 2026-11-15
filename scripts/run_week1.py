@@ -58,7 +58,9 @@ def run_item(llm, strat, setting, item, abstract):
         extra["step1"] = r1.text
         if a is None:
             o, e = None, "step1_" + (e1 or "fail")
-        elif not a.get("in_scope", True) and a.get("refusal_category") in metrics.CATS:
+        # v2: route on refusal_category. v1 also required in_scope == false, but the model often sets
+        # in_scope=true together with refusal_category="emergency" (see results/week1/v1_inscope_gate/).
+        elif a.get("refusal_category") in metrics.CATS:
             cat = a["refusal_category"]
             o, e = {"status": "refused", "refusal_category": cat, "verdict": None, "explanation": None,
                     "evidence_quote": None, "confidence": None, "message": prompts.REFUSAL_MESSAGES[cat]}, None
