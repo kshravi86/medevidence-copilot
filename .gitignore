@@ -218,3 +218,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local dataset files
+data/
+
+certs/
+
+.cache/
+__pycache__/
