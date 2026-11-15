@@ -1,0 +1,211 @@
+{
+ "confusion": {
+  "closed__fewshot": {
+   "maybe->maybe": 5,
+   "maybe->yes": 6,
+   "no->maybe": 15,
+   "no->no": 4,
+   "no->yes": 8,
+   "yes->maybe": 14,
+   "yes->yes": 26
+  },
+  "closed__cot": {
+   "maybe->maybe": 8,
+   "maybe->none": 1,
+   "maybe->yes": 2,
+   "no->maybe": 18,
+   "no->no": 4,
+   "no->none": 2,
+   "no->yes": 3,
+   "yes->maybe": 20,
+   "yes->no": 1,
+   "yes->none": 6,
+   "yes->yes": 13
+  },
+  "closed__cot_sc": {
+   "maybe->maybe": 7,
+   "maybe->none": 1,
+   "maybe->yes": 3,
+   "no->maybe": 16,
+   "no->no": 4,
+   "no->none": 4,
+   "no->yes": 3,
+   "yes->maybe": 21,
+   "yes->no": 3,
+   "yes->none": 4,
+   "yes->yes": 12
+  },
+  "closed__decompose": {
+   "maybe->maybe": 1,
+   "maybe->yes": 10,
+   "no->maybe": 6,
+   "no->no": 6,
+   "no->none": 1,
+   "no->yes": 14,
+   "yes->maybe": 5,
+   "yes->no": 2,
+   "yes->none": 1,
+   "yes->yes": 32
+  },
+  "bm25__fewshot": {
+   "maybe->maybe": 5,
+   "maybe->no": 1,
+   "maybe->yes": 5,
+   "no->maybe": 10,
+   "no->no": 10,
+   "no->none": 5,
+   "no->yes": 2,
+   "yes->maybe": 6,
+   "yes->no": 2,
+   "yes->none": 2,
+   "yes->yes": 30
+  },
+  "bm25__cot": {
+   "maybe->maybe": 5,
+   "maybe->no": 2,
+   "maybe->yes": 4,
+   "no->maybe": 6,
+   "no->no": 12,
+   "no->none": 7,
+   "no->yes": 2,
+   "yes->maybe": 10,
+   "yes->no": 2,
+   "yes->none": 4,
+   "yes->yes": 24
+  },
+  "bm25__cot_sc": {
+   "maybe->maybe": 5,
+   "maybe->no": 2,
+   "maybe->yes": 4,
+   "no->maybe": 7,
+   "no->no": 12,
+   "no->none": 7,
+   "no->yes": 1,
+   "yes->maybe": 10,
+   "yes->no": 2,
+   "yes->none": 4,
+   "yes->yes": 24
+  },
+  "bm25__decompose": {
+   "maybe->maybe": 4,
+   "maybe->no": 1,
+   "maybe->yes": 6,
+   "no->maybe": 6,
+   "no->no": 10,
+   "no->none": 6,
+   "no->yes": 5,
+   "yes->maybe": 6,
+   "yes->no": 1,
+   "yes->none": 4,
+   "yes->yes": 29
+  }
+ },
+ "taxonomy": {
+  "bm25__fewshot": {
+   "pass": 40,
+   "retrieval miss (top-1 not gold)": 9,
+   "wrong verdict (gold abstract retrieved)": 25,
+   "quote not verbatim in abstract": 4,
+   "_verdict_acc_when_top1_hit": 0.638,
+   "_verdict_acc_when_top1_miss": 0.111,
+   "_n_hit_miss": [
+    69,
+    9
+   ]
+  },
+  "bm25__cot": {
+   "wrong verdict (gold abstract retrieved)": 26,
+   "retrieval miss (top-1 not gold)": 9,
+   "pass": 36,
+   "quote not verbatim in abstract": 5,
+   "over-refusal": 1,
+   "said insufficient_evidence despite gold abstract": 1,
+   "_verdict_acc_when_top1_hit": 0.594,
+   "_verdict_acc_when_top1_miss": 0.0,
+   "_n_hit_miss": [
+    69,
+    9
+   ]
+  },
+  "bm25__cot_sc": {
+   "wrong verdict (gold abstract retrieved)": 26,
+   "retrieval miss (top-1 not gold)": 9,
+   "pass": 38,
+   "quote not verbatim in abstract": 3,
+   "over-refusal": 1,
+   "said insufficient_evidence despite gold abstract": 1,
+   "_verdict_acc_when_top1_hit": 0.594,
+   "_verdict_acc_when_top1_miss": 0.0,
+   "_n_hit_miss": [
+    69,
+    9
+   ]
+  },
+  "bm25__decompose": {
+   "pass": 39,
+   "retrieval miss (top-1 not gold)": 8,
+   "wrong verdict (gold abstract retrieved)": 24,
+   "quote not verbatim in abstract": 2,
+   "over-refusal": 1,
+   "unfaithful explanation (judge)": 1,
+   "said insufficient_evidence despite gold abstract": 3,
+   "_verdict_acc_when_top1_hit": 0.609,
+   "_verdict_acc_when_top1_miss": 0.111,
+   "_n_hit_miss": [
+    69,
+    9
+   ]
+  }
+ },
+ "bootstrap": {
+  "bm25__fewshot - closed__fewshot": {
+   "diff": 0.128,
+   "ci95": [
+    0.0,
+    0.256
+   ]
+  },
+  "bm25__fewshot - bm25__cot": {
+   "diff": 0.051,
+   "ci95": [
+    -0.051,
+    0.154
+   ]
+  },
+  "bm25__fewshot - bm25__decompose": {
+   "diff": 0.026,
+   "ci95": [
+    -0.064,
+    0.115
+   ]
+  },
+  "bm25__decompose - closed__decompose": {
+   "diff": 0.051,
+   "ci95": [
+    -0.077,
+    0.179
+   ]
+  },
+  "closed__decompose - closed__fewshot": {
+   "diff": 0.051,
+   "ci95": [
+    -0.064,
+    0.167
+   ]
+  },
+  "STRICT bm25__fewshot - bm25__cot": {
+   "diff": 0.051,
+   "ci95": [
+    -0.038,
+    0.141
+   ]
+  },
+  "STRICT bm25__fewshot - bm25__decompose": {
+   "diff": 0.013,
+   "ci95": [
+    -0.09,
+    0.115
+   ]
+  }
+ }
+}

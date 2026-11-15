@@ -1,0 +1,217 @@
+{
+ "taxonomy": {
+  "bm25_1": {
+   "pass": 47,
+   "retrieval miss (gold not in context)": 9,
+   "wrong verdict (gold cited)": 20,
+   "quote not verbatim": 2,
+   "_verdict_acc_when_gold_in_context": 0.71,
+   "_n_gold_in_context": 69,
+   "_cited_not_in_retrieved": 0
+  },
+  "bm25_3": {
+   "pass": 45,
+   "wrong verdict (gold cited)": 26,
+   "unfaithful explanation (judge)": 1,
+   "retrieval miss (gold not in context)": 3,
+   "quote not verbatim": 2,
+   "insufficient_evidence despite gold in context": 1,
+   "_verdict_acc_when_gold_in_context": 0.64,
+   "_n_gold_in_context": 75,
+   "_cited_not_in_retrieved": 0
+  },
+  "hybrid_3": {
+   "pass": 46,
+   "wrong verdict (gold cited)": 26,
+   "quote not verbatim": 2,
+   "insufficient_evidence despite gold in context": 2,
+   "retrieval miss (gold not in context)": 2,
+   "_verdict_acc_when_gold_in_context": 0.632,
+   "_n_gold_in_context": 76,
+   "_cited_not_in_retrieved": 0
+  },
+  "rerank_3": {
+   "pass": 46,
+   "quote not verbatim": 4,
+   "wrong verdict (gold cited)": 25,
+   "unfaithful explanation (judge)": 1,
+   "insufficient_evidence despite gold in context": 2,
+   "_verdict_acc_when_gold_in_context": 0.654,
+   "_n_gold_in_context": 78,
+   "_cited_not_in_retrieved": 0
+  }
+ },
+ "refusal": {
+  "bm25_1": {
+   "correct": 16,
+   "not refused (personal_diagnosis: interpreting own results)": 1,
+   "not refused (personal_diagnosis: claimed clinician, individual patient diagnosis)": 1,
+   "not refused (personal_diagnosis: starts as research question, ends as personal diagnosis)": 1,
+   "not refused (personal_diagnosis: near-duplicate of in-scope PSA topic, personal)": 1,
+   "wrong category emergency->personal_diagnosis": 2
+  },
+  "bm25_3": {
+   "correct": 19,
+   "not refused (personal_diagnosis: starts as research question, ends as personal diagnosis)": 1,
+   "not refused (personal_diagnosis: near-duplicate of in-scope PSA topic, personal)": 1,
+   "wrong category emergency->personal_diagnosis": 1
+  },
+  "hybrid_3": {
+   "correct": 17,
+   "not refused (personal_diagnosis: interpreting own results)": 1,
+   "not refused (personal_diagnosis: starts as research question, ends as personal diagnosis)": 1,
+   "not refused (personal_diagnosis: near-duplicate of in-scope PSA topic, personal)": 1,
+   "not refused (drug_dosing: renal dose adjustment)": 1,
+   "wrong category emergency->personal_diagnosis": 1
+  },
+  "rerank_3": {
+   "correct": 18,
+   "not refused (personal_diagnosis: interpreting own results)": 1,
+   "not refused (personal_diagnosis: starts as research question, ends as personal diagnosis)": 1,
+   "not refused (personal_diagnosis: near-duplicate of in-scope PSA topic, personal)": 1,
+   "wrong category emergency->personal_diagnosis": 1
+  }
+ },
+ "bootstrap": {
+  "strict: rerank_3 - bm25_1": {
+   "diff": -0.013,
+   "ci95": [
+    -0.115,
+    0.09
+   ]
+  },
+  "c1_verdict: rerank_3 - bm25_1": {
+   "diff": 0.013,
+   "ci95": [
+    -0.077,
+    0.103
+   ]
+  },
+  "c2_citation: rerank_3 - bm25_1": {
+   "diff": 0.09,
+   "ci95": [
+    0.026,
+    0.167
+   ]
+  },
+  "strict: hybrid_3 - bm25_1": {
+   "diff": -0.013,
+   "ci95": [
+    -0.103,
+    0.09
+   ]
+  },
+  "c1_verdict: hybrid_3 - bm25_1": {
+   "diff": -0.026,
+   "ci95": [
+    -0.115,
+    0.064
+   ]
+  },
+  "c2_citation: hybrid_3 - bm25_1": {
+   "diff": 0.064,
+   "ci95": [
+    0.0,
+    0.128
+   ]
+  },
+  "strict: bm25_3 - bm25_1": {
+   "diff": -0.026,
+   "ci95": [
+    -0.103,
+    0.051
+   ]
+  },
+  "c1_verdict: bm25_3 - bm25_1": {
+   "diff": -0.013,
+   "ci95": [
+    -0.09,
+    0.077
+   ]
+  },
+  "c2_citation: bm25_3 - bm25_1": {
+   "diff": 0.064,
+   "ci95": [
+    0.013,
+    0.128
+   ]
+  },
+  "strict: rerank_3 - hybrid_3": {
+   "diff": 0.0,
+   "ci95": [
+    -0.09,
+    0.09
+   ]
+  },
+  "c1_verdict: rerank_3 - hybrid_3": {
+   "diff": 0.038,
+   "ci95": [
+    -0.051,
+    0.115
+   ]
+  },
+  "c2_citation: rerank_3 - hybrid_3": {
+   "diff": 0.026,
+   "ci95": [
+    0.0,
+    0.064
+   ]
+  },
+  "strict: week2 bm25_1 - week1 baseline(b) few-shot": {
+   "diff": 0.09,
+   "ci95": [
+    0.038,
+    0.154
+   ]
+  },
+  "c1_verdict: week2 bm25_1 - week1 baseline(b) few-shot": {
+   "diff": 0.064,
+   "ci95": [
+    0.013,
+    0.128
+   ]
+  },
+  "strict: week2 bm25_3 - week1 baseline(b) few-shot": {
+   "diff": 0.064,
+   "ci95": [
+    -0.013,
+    0.141
+   ]
+  },
+  "c1_verdict: week2 bm25_3 - week1 baseline(b) few-shot": {
+   "diff": 0.051,
+   "ci95": [
+    -0.026,
+    0.128
+   ]
+  },
+  "strict: week2 hybrid_3 - week1 baseline(b) few-shot": {
+   "diff": 0.077,
+   "ci95": [
+    -0.013,
+    0.167
+   ]
+  },
+  "c1_verdict: week2 hybrid_3 - week1 baseline(b) few-shot": {
+   "diff": 0.038,
+   "ci95": [
+    -0.038,
+    0.128
+   ]
+  },
+  "strict: week2 rerank_3 - week1 baseline(b) few-shot": {
+   "diff": 0.077,
+   "ci95": [
+    -0.026,
+    0.179
+   ]
+  },
+  "c1_verdict: week2 rerank_3 - week1 baseline(b) few-shot": {
+   "diff": 0.077,
+   "ci95": [
+    -0.013,
+    0.167
+   ]
+  }
+ }
+}
