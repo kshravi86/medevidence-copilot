@@ -226,3 +226,8 @@ certs/
 
 .cache/
 __pycache__/
+
+# Doctor test app: run logs and recorded clinician feedback
+app/logs/
+app/logs_run.txt
+app/feedback.jsonl

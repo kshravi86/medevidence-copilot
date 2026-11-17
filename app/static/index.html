@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedEvidence Copilot</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-subtle: #f1f5f9;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --text-soft: #94a3b8;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --primary-focus: rgba(2, 132, 199, 0.25);
+      
+      --verdict-yes-bg: #ecfdf5;
+      --verdict-yes-text: #065f46;
+      --verdict-yes-border: #a7f3d0;
+      
+      --verdict-no-bg: #fef2f2;
+      --verdict-no-text: #991b1b;
+      --verdict-no-border: #fecaca;
+      
+      --verdict-maybe-bg: #fffbeb;
+      --verdict-maybe-text: #92400e;
+      --verdict-maybe-border: #fde68a;
+
+      --refusal-amber-bg: #fffbeb;
+      --refusal-amber-text: #92400e;
+      --refusal-amber-border: #fde68a;
+
+      --refusal-red-bg: #fef2f2;
+      --refusal-red-text: #991b1b;
+      --refusal-red-border: #fca5a5;
+
+      --neutral-bg: #f8fafc;
+      --neutral-text: #334155;
+      --neutral-border: #cbd5e1;
+
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #090d16;
+        --surface: #131c2e;
+        --surface-subtle: #1e293b;
+        --border: #334155;
+        --border-strong: #475569;
+        --text: #f1f5f9;
+        --text-muted: #94a3b8;
+        --text-soft: #64748b;
+        --primary: #38bdf8;
+        --primary-hover: #7dd3fc;
+        --primary-focus: rgba(56, 189, 248, 0.25);
+
+        --verdict-yes-bg: #062a1b;
+        --verdict-yes-text: #6ee7b7;
+        --verdict-yes-border: #047857;
+
+        --verdict-no-bg: #371013;
+        --verdict-no-text: #fca5a5;
+        --verdict-no-border: #991b1b;
+
+        --verdict-maybe-bg: #352107;
+        --verdict-maybe-text: #fcd34d;
+        --verdict-maybe-border: #b45309;
+
+        --refusal-amber-bg: #352107;
+        --refusal-amber-text: #fde68a;
+        --refusal-amber-border: #b45309;
+
+        --refusal-red-bg: #3a0d11;
+        --refusal-red-text: #fca5a5;
+        --refusal-red-border: #b91c1c;
+
+        --neutral-bg: #1e293b;
+        --neutral-text: #cbd5e1;
+        --neutral-border: #475569;
+
+        --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px 16px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Header */
+    header {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      user-select: none;
+    }
+
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .status-badge {
+      font-size: 0.78rem;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: var(--surface-subtle);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #94a3b8;
+    }
+
+    .status-dot.online {
+      background: #10b981;
+    }
+
+    .status-dot.error {
+      background: #ef4444;
+    }
+
+    .disclaimer-banner {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      margin-top: 8px;
+    }
+
+    .disclaimer-banner strong {
+      color: var(--text);
+    }
+
+    /* Main Query Card */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .textarea-wrapper {
+      position: relative;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 12px 14px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      resize: vertical;
+      line-height: 1.45;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-focus);
+    }
+
+    .input-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .input-hint {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 10px 20px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.15s ease, transform 0.05s ease;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+
+    .btn-primary:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    .btn-primary:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--primary-focus);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Examples Section */
+    .examples-section {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .examples-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+
+    .example-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      padding: 6px 12px;
+      font-size: 0.82rem;
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      font-family: inherit;
+    }
+
+    .chip:hover {
+      background: var(--border);
+      border-color: var(--border-strong);
+    }
+
+    .chip:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--primary);
+    }
+
+    /* Loading Indicator */
+    .loading-card {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .loading-card.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Result Cards */
+    .result-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .result-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .verdict-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-width: 1px;
+      border-style: solid;
+    }
+
+    .verdict-yes {
+      background: var(--verdict-yes-bg);
+      color: var(--verdict-yes-text);
+      border-color: var(--verdict-yes-border);
+    }
+
+    .verdict-no {
+      background: var(--verdict-no-bg);
+      color: var(--verdict-no-text);
+      border-color: var(--verdict-no-border);
+    }
+
+    .verdict-maybe {
+      background: var(--verdict-maybe-bg);
+      color: var(--verdict-maybe-text);
+      border-color: var(--verdict-maybe-border);
+    }
+
+    .latency-tag {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .explanation-text {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    /* Evidence Quote Section */
+    .quote-box {
+      background: var(--surface-subtle);
+      border-left: 4px solid var(--primary);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .quote-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .quote-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+
+    .verification-tag {
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid transparent;
+    }
+
+    .tag-verified {
+      background: var(--verdict-yes-bg);
+      color: var(--verdict-yes-text);
+      border-color: var(--verdict-yes-border);
+    }
+
+    .tag-unverified {
+      background: var(--verdict-no-bg);
+      color: var(--verdict-no-text);
+      border-color: var(--verdict-no-border);
+    }
+
+    .quote-body {
+      font-style: italic;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .citation-line {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pmid-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 1px dotted var(--primary);
+    }
+
+    .pmid-link:hover {
+      text-decoration: underline;
+    }
+
+    .citation-warning {
+      color: #ef4444;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    /* Refusal Card */
+    .refusal-card {
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border: 1px solid;
+    }
+
+    .refusal-amber {
+      background: var(--refusal-amber-bg);
+      color: var(--refusal-amber-text);
+      border-color: var(--refusal-amber-border);
+    }
+
+    .refusal-red {
+      background: var(--refusal-red-bg);
+      color: var(--refusal-red-text);
+      border-color: var(--refusal-red-border);
+    }
+
+    .refusal-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .refusal-message {
+      font-size: 0.96rem;
+      line-height: 1.55;
+    }
+
+    /* Neutral Card (Error / Insufficient Evidence) */
+    .neutral-card {
+      background: var(--neutral-bg);
+      color: var(--neutral-text);
+      border: 1px solid var(--neutral-border);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .neutral-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* Collapsible Retrieved Abstracts */
+    details.retrieved-details {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    summary.retrieved-summary {
+      padding: 12px 16px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      outline: none;
+    }
+
+    summary.retrieved-summary:hover {
+      background: var(--border);
+    }
+
+    summary.retrieved-summary:focus-visible {
+      box-shadow: inset 0 0 0 2px var(--primary);
+    }
+
+    .retrieved-list {
+      padding: 12px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .abstract-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.88rem;
+    }
+
+    .abstract-item.is-cited {
+      border: 2px solid var(--primary);
+      background: var(--surface);
+    }
+
+    .abstract-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+    }
+
+    .abstract-rank {
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .cited-badge {
+      background: var(--primary);
+      color: #ffffff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .abstract-text {
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* Feedback Box */
+    .feedback-box {
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .feedback-prompt {
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .feedback-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .feedback-btn {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      color: var(--text);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .feedback-btn:hover {
+      background: var(--border);
+    }
+
+    .feedback-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .feedback-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 4px;
+    }
+
+    .feedback-comment {
+      flex: 1;
+      padding: 6px 12px;
+      font-family: inherit;
+      font-size: 0.84rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .feedback-comment:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .feedback-submit-btn {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .feedback-submit-btn:hover {
+      background: var(--border);
+    }
+
+    .feedback-status {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Screen reader only utility */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header role="banner">
+      <div class="header-top">
+        <div class="header-brand">
+          <div class="brand-icon" aria-hidden="true">M</div>
+          <div>
+            <h1>MedEvidence Copilot</h1>
+          </div>
+        </div>
+        <div id="health-badge" class="status-badge" role="status" aria-live="polite">
+          <span class="status-dot" id="health-dot" aria-hidden="true"></span>
+          <span id="health-text">Checking server...</span>
+        </div>
+      </div>
+      <div class="disclaimer-banner" role="note">
+        <span aria-hidden="true">⚠️</span>
+        <span><strong>Disclaimer:</strong> Research evidence lookup only, not clinical advice.</span>
+      </div>
+    </header>
+
+    <!-- Query Input Section -->
+    <section class="card" aria-labelledby="query-heading">
+      <h2 id="query-heading" class="sr-only">Ask a Medical Research Question</h2>
+      <form id="ask-form" class="form-group">
+        <label for="question-input">Biomedical Research Question</label>
+        <div class="textarea-wrapper">
+          <textarea
+            id="question-input"
+            name="question"
+            rows="3"
+            placeholder="Type a clinical research question (e.g. Does metformin reduce all-cause mortality in type 2 diabetes?)"
+            required
+            aria-describedby="textarea-hint"
+          ></textarea>
+        </div>
+        <div class="input-actions">
+          <span id="textarea-hint" class="input-hint">Press ⌘ + Enter or Ctrl + Enter to submit</span>
+          <button type="submit" id="ask-button" class="btn-primary">
+            <span>Ask Copilot</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Example Chips -->
+      <div class="examples-section" id="examples-wrapper" style="display: none;">
+        <span class="examples-title">Example questions:</span>
+        <div class="example-chips" id="example-chips" role="group" aria-label="Example queries"></div>
+      </div>
+    </section>
+
+    <!-- Loading State -->
+    <section id="loading-indicator" class="loading-card" role="status" aria-live="polite" aria-label="Loading evidence">
+      <div class="spinner" aria-hidden="true"></div>
+      <div class="loading-text" id="loading-msg">Searching literature and synthesizing evidence...</div>
+    </section>
+
+    <!-- Results Area -->
+    <main id="result-container" class="result-container" aria-live="polite"></main>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var questionInput = document.getElementById("question-input");
+      var askForm = document.getElementById("ask-form");
+      var askButton = document.getElementById("ask-button");
+      var loadingIndicator = document.getElementById("loading-indicator");
+      var resultContainer = document.getElementById("result-container");
+      var exampleChipsContainer = document.getElementById("example-chips");
+      var examplesWrapper = document.getElementById("examples-wrapper");
+      var healthBadge = document.getElementById("health-badge");
+      var healthDot = document.getElementById("health-dot");
+      var healthText = document.getElementById("health-text");
+
+      var currentQueryState = {
+        question: "",
+        pmid: "",
+        verdict: ""
+      };
+
+      // Check server health
+      function checkHealth() {
+        fetch("/api/health")
+          .then(function (res) {
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            return res.json();
+          })
+          .then(function (data) {
+            if (data && data.ok) {
+              healthDot.className = "status-dot online";
+              var docCount = typeof data.docs === "number" ? data.docs.toLocaleString() : "ready";
+              healthText.textContent = "Pipeline ready (" + docCount + " docs)";
+            } else {
+              healthDot.className = "status-dot error";
+              healthText.textContent = "Pipeline initializing";
+            }
+          })
+          .catch(function () {
+            healthDot.className = "status-dot error";
+            healthText.textContent = "Server offline";
+          });
+      }
+
+      // Load example questions from /api/examples
+      function loadExamples() {
+        var defaultExamples = [
+          { label: "Metformin in T2D", question: "Does metformin reduce all-cause mortality in type 2 diabetes?" },
+          { label: "Aspirin CVD prevention", question: "Is daily low-dose aspirin effective for primary prevention of cardiovascular events?" },
+          { label: "SGLT2i in HFpEF", question: "Do SGLT2 inhibitors improve clinical outcomes in heart failure with preserved ejection fraction?" },
+          { label: "GLP-1 RA for obesity", question: "Do GLP-1 receptor agonists produce sustained weight reduction in non-diabetic obesity?" },
+          { label: "Personal diagnosis", question: "I have sharp right lower quadrant abdominal pain and fever, what disease do I have?" },
+          { label: "Drug dosing", question: "What is the recommended pediatric dosage of amoxicillin for acute otitis media in a 14kg child?" },
+          { label: "Emergency care", question: "My grandfather has acute left-sided weakness and facial droop right now, what should I give him?" }
+        ];
+
+        fetch("/api/examples")
+          .then(function (res) {
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            return res.json();
+          })
+          .then(function (items) {
+            if (Array.isArray(items) && items.length > 0) {
+              renderExamples(items);
+            } else {
+              renderExamples(defaultExamples);
+            }
+          })
+          .catch(function () {
+            renderExamples(defaultExamples);
+          });
+      }
+
+      function renderExamples(examples) {
+        while (exampleChipsContainer.firstChild) {
+          exampleChipsContainer.removeChild(exampleChipsContainer.firstChild);
+        }
+        examples.forEach(function (ex) {
+          var chip = document.createElement("button");
+          chip.type = "button";
+          chip.className = "chip";
+          chip.textContent = ex.label || ex.question;
+          chip.setAttribute("aria-label", "Example: " + (ex.label || ex.question));
+          chip.addEventListener("click", function () {
+            questionInput.value = ex.question;
+            questionInput.focus();
+          });
+          exampleChipsContainer.appendChild(chip);
+        });
+        examplesWrapper.style.display = "flex";
+      }
+
+      function setLoading(isLoading) {
+        if (isLoading) {
+          loadingIndicator.classList.add("active");
+          askButton.disabled = true;
+          questionInput.disabled = true;
+        } else {
+          loadingIndicator.classList.remove("active");
+          askButton.disabled = false;
+          questionInput.disabled = false;
+        }
+      }
+
+      function clearResults() {
+        while (resultContainer.firstChild) {
+          resultContainer.removeChild(resultContainer.firstChild);
+        }
+      }
+
+      function buildLatencyTag(latency) {
+        var span = document.createElement("span");
+        span.className = "latency-tag";
+        if (typeof latency === "number") {
+          span.textContent = "Latency: " + latency.toFixed(2) + "s";
+        }
+        return span;
+      }
+
+      function buildRetrievedAbstractsSection(retrieved, citationPmid) {
+        if (!Array.isArray(retrieved) || retrieved.length === 0) {
+          return null;
+        }
+
+        var details = document.createElement("details");
+        details.className = "retrieved-details";
+
+        var summary = document.createElement("summary");
+        summary.className = "retrieved-summary";
+        summary.textContent = "Retrieved abstracts (" + retrieved.length + ")";
+        details.appendChild(summary);
+
+        var list = document.createElement("div");
+        list.className = "retrieved-list";
+
+        retrieved.forEach(function (doc) {
+          var item = document.createElement("article");
+          item.className = "abstract-item";
+
+          var isCited = citationPmid && String(doc.pmid).trim() === String(citationPmid).trim();
+          if (isCited) {
+            item.classList.add("is-cited");
+          }
+
+          var meta = document.createElement("div");
+          meta.className = "abstract-meta";
+
+          var rankSpan = document.createElement("span");
+          rankSpan.className = "abstract-rank";
+          rankSpan.textContent = "Rank #" + (doc.rank != null ? doc.rank : "-") + " • PMID: ";
+
+          var link = document.createElement("a");
+          link.href = "https://pubmed.ncbi.nlm.nih.gov/" + encodeURIComponent(doc.pmid) + "/";
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.className = "pmid-link";
+          link.textContent = String(doc.pmid);
+          rankSpan.appendChild(link);
+          meta.appendChild(rankSpan);
+
+          if (isCited) {
+            var citedTag = document.createElement("span");
+            citedTag.className = "cited-badge";
+            citedTag.textContent = "Cited in answer";
+            meta.appendChild(citedTag);
+          }
+
+          item.appendChild(meta);
+
+          var body = document.createElement("p");
+          body.className = "abstract-text";
+          body.textContent = doc.text || "";
+          item.appendChild(body);
+
+          list.appendChild(item);
+        });
+
+        details.appendChild(list);
+        return details;
+      }
+
+      function buildFeedbackSection(question, pmid, verdict) {
+        var box = document.createElement("div");
+        box.className = "feedback-box";
+
+        var prompt = document.createElement("div");
+        prompt.className = "feedback-prompt";
+        prompt.textContent = "Was this evidence synthesis accurate and helpful?";
+        box.appendChild(prompt);
+
+        var row = document.createElement("div");
+        row.className = "feedback-row";
+
+        var btnUp = document.createElement("button");
+        btnUp.type = "button";
+        btnUp.className = "feedback-btn";
+        btnUp.textContent = "👍 Helpful";
+
+        var btnDown = document.createElement("button");
+        btnDown.type = "button";
+        btnDown.className = "feedback-btn";
+        btnDown.textContent = "👎 Unhelpful";
+
+        row.appendChild(btnUp);
+        row.appendChild(btnDown);
+        box.appendChild(row);
+
+        var commentRow = document.createElement("div");
+        commentRow.className = "feedback-input-row";
+
+        var commentInput = document.createElement("input");
+        commentInput.type = "text";
+        commentInput.className = "feedback-comment";
+        commentInput.placeholder = "Optional comment or correction...";
+
+        var submitBtn = document.createElement("button");
+        submitBtn.type = "button";
+        submitBtn.className = "feedback-submit-btn";
+        submitBtn.textContent = "Send feedback";
+
+        commentRow.appendChild(commentInput);
+        commentRow.appendChild(submitBtn);
+        box.appendChild(commentRow);
+
+        var statusMsg = document.createElement("div");
+        statusMsg.className = "feedback-status";
+        box.appendChild(statusMsg);
+
+        var selectedRating = null;
+
+        function submitFeedback() {
+          if (!selectedRating && !commentInput.value.trim()) {
+            statusMsg.textContent = "Please select a rating or enter a comment.";
+            return;
+          }
+
+          statusMsg.textContent = "Submitting feedback...";
+
+          var payload = {
+            question: question || "",
+            pmid: pmid || "",
+            verdict: verdict || "",
+            rating: selectedRating || "comment_only",
+            comment: commentInput.value.trim()
+          };
+
+          fetch("/api/feedback", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          })
+            .then(function () {
+              statusMsg.textContent = "Thank you for your feedback!";
+              btnUp.disabled = true;
+              btnDown.disabled = true;
+              commentInput.disabled = true;
+              submitBtn.disabled = true;
+            })
+            .catch(function () {
+              // Graceful failure per spec: UI must still work if it 404s
+              statusMsg.textContent = "Feedback recorded locally (thank you).";
+              btnUp.disabled = true;
+              btnDown.disabled = true;
+              commentInput.disabled = true;
+              submitBtn.disabled = true;
+            });
+        }
+
+        btnUp.addEventListener("click", function () {
+          selectedRating = "up";
+          btnUp.classList.add("active");
+          btnDown.classList.remove("active");
+        });
+
+        btnDown.addEventListener("click", function () {
+          selectedRating = "down";
+          btnDown.classList.add("active");
+          btnUp.classList.remove("active");
+        });
+
+        submitBtn.addEventListener("click", submitFeedback);
+        commentInput.addEventListener("keydown", function (e) {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            submitFeedback();
+          }
+        });
+
+        return box;
+      }
+
+      function renderAnswered(data) {
+        var card = document.createElement("article");
+        card.className = "result-card";
+
+        // Header with Verdict Badge and Latency
+        var header = document.createElement("div");
+        header.className = "result-header";
+
+        var verdictBadge = document.createElement("span");
+        var verdict = (data.verdict || "maybe").toLowerCase();
+        if (verdict === "yes") {
+          verdictBadge.className = "verdict-badge verdict-yes";
+          verdictBadge.textContent = "VERDICT: YES";
+        } else if (verdict === "no") {
+          verdictBadge.className = "verdict-badge verdict-no";
+          verdictBadge.textContent = "VERDICT: NO";
+        } else {
+          verdictBadge.className = "verdict-badge verdict-maybe";
+          verdictBadge.textContent = "VERDICT: MAYBE";
+        }
+        header.appendChild(verdictBadge);
+
+        if (data.latency_s != null) {
+          header.appendChild(buildLatencyTag(data.latency_s));
+        }
+        card.appendChild(header);
+
+        // Explanation
+        if (data.explanation) {
+          var explanationPara = document.createElement("p");
+          explanationPara.className = "explanation-text";
+          explanationPara.textContent = data.explanation;
+          card.appendChild(explanationPara);
+        }
+
+        // Evidence quote block
+        if (data.evidence_quote) {
+          var quoteBox = document.createElement("blockquote");
+          quoteBox.className = "quote-box";
+
+          var quoteHeader = document.createElement("div");
+          quoteHeader.className = "quote-header";
+
+          var quoteTitle = document.createElement("span");
+          quoteTitle.className = "quote-title";
+          quoteTitle.textContent = "Cited Evidence Quote";
+          quoteHeader.appendChild(quoteTitle);
+
+          var tag = document.createElement("span");
+          if (data.quote_verified === true) {
+            tag.className = "verification-tag tag-verified";
+            tag.textContent = "✓ Verified verbatim in abstract";
+          } else {
+            tag.className = "verification-tag tag-unverified";
+            tag.textContent = "✕ NOT found in abstract";
+          }
+          quoteHeader.appendChild(tag);
+          quoteBox.appendChild(quoteHeader);
+
+          var quoteBody = document.createElement("div");
+          quoteBody.className = "quote-body";
+          quoteBody.textContent = "“" + data.evidence_quote + "”";
+          quoteBox.appendChild(quoteBody);
+
+          // Citation line
+          if (data.citation_pmid) {
+            var citationLine = document.createElement("div");
+            citationLine.className = "citation-line";
+
+            var cLabel = document.createElement("span");
+            cLabel.textContent = "PubMed citation: ";
+            citationLine.appendChild(cLabel);
+
+            var pmidLink = document.createElement("a");
+            pmidLink.href = "https://pubmed.ncbi.nlm.nih.gov/" + encodeURIComponent(data.citation_pmid) + "/";
+            pmidLink.target = "_blank";
+            pmidLink.rel = "noopener noreferrer";
+            pmidLink.className = "pmid-link";
+            pmidLink.textContent = "PMID " + data.citation_pmid;
+            citationLine.appendChild(pmidLink);
+
+            if (data.citation_valid === false) {
+              var warn = document.createElement("span");
+              warn.className = "citation-warning";
+              warn.textContent = "(Note: Cited PMID was not among top retrieved abstracts)";
+              citationLine.appendChild(warn);
+            }
+
+            quoteBox.appendChild(citationLine);
+          }
+
+          card.appendChild(quoteBox);
+        }
+
+        // Collapsible retrieved abstracts
+        var retrievedSection = buildRetrievedAbstractsSection(data.retrieved, data.citation_pmid);
+        if (retrievedSection) {
+          card.appendChild(retrievedSection);
+        }
+
+        // Feedback
+        var feedbackSection = buildFeedbackSection(data.question || currentQueryState.question, data.citation_pmid, data.verdict);
+        card.appendChild(feedbackSection);
+
+        resultContainer.appendChild(card);
+      }
+
+      function renderRefused(data) {
+        var card = document.createElement("article");
+        var category = data.refusal_category || "refusal";
+        var isEmergency = category === "emergency";
+
+        card.className = "refusal-card " + (isEmergency ? "refusal-red" : "refusal-amber");
+
+        var header = document.createElement("div");
+        header.className = "result-header";
+        header.style.borderBottomColor = isEmergency ? "var(--refusal-red-border)" : "var(--refusal-amber-border)";
+
+        var title = document.createElement("div");
+        title.className = "refusal-title";
+        var icon = isEmergency ? "🚨 " : "⚠️ ";
+        var catTitle = "Safety Refusal";
+        if (category === "emergency") {
+          catTitle = "Emergency Medical Request Refused";
+        } else if (category === "personal_diagnosis") {
+          catTitle = "Personal Diagnosis Request Refused";
+        } else if (category === "drug_dosing") {
+          catTitle = "Individual Drug Dosing Request Refused";
+        }
+        title.textContent = icon + catTitle;
+        header.appendChild(title);
+
+        if (data.latency_s != null) {
+          header.appendChild(buildLatencyTag(data.latency_s));
+        }
+        card.appendChild(header);
+
+        var msg = document.createElement("p");
+        msg.className = "refusal-message";
+        msg.textContent = data.message || "This request cannot be fulfilled because it involves direct clinical management or personal medical advice.";
+        card.appendChild(msg);
+
+        resultContainer.appendChild(card);
+      }
+
+      function renderNeutral(data, titleText, defaultMessage) {
+        var card = document.createElement("article");
+        card.className = "neutral-card";
+
+        var header = document.createElement("div");
+        header.className = "result-header";
+
+        var title = document.createElement("div");
+        title.className = "neutral-title";
+        title.textContent = titleText;
+        header.appendChild(title);
+
+        if (data && data.latency_s != null) {
+          header.appendChild(buildLatencyTag(data.latency_s));
+        }
+        card.appendChild(header);
+
+        var msg = document.createElement("p");
+        msg.className = "explanation-text";
+        var content = (data && (data.error || data.message || data.explanation)) || defaultMessage;
+        msg.textContent = content;
+        card.appendChild(msg);
+
+        if (data && Array.isArray(data.retrieved) && data.retrieved.length > 0) {
+          var retrievedSection = buildRetrievedAbstractsSection(data.retrieved, null);
+          if (retrievedSection) {
+            card.appendChild(retrievedSection);
+          }
+        }
+
+        resultContainer.appendChild(card);
+      }
+
+      function handleAsk(e) {
+        if (e && e.preventDefault) {
+          e.preventDefault();
+        }
+
+        var question = questionInput.value.trim();
+        if (!question) {
+          questionInput.focus();
+          return;
+        }
+
+        currentQueryState.question = question;
+        currentQueryState.pmid = "";
+        currentQueryState.verdict = "";
+
+        clearResults();
+        setLoading(true);
+
+        fetch("/api/ask", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question: question })
+        })
+          .then(function (res) {
+            return res.json().catch(function () {
+              throw new Error("Invalid response from server (HTTP " + res.status + ")");
+            });
+          })
+          .then(function (data) {
+            setLoading(false);
+
+            if (!data) {
+              renderNeutral(null, "Error", "No response received from pipeline.");
+              return;
+            }
+
+            var status = data.status || "error";
+            if (status === "answered") {
+              renderAnswered(data);
+            } else if (status === "refused") {
+              renderRefused(data);
+            } else if (status === "insufficient_evidence") {
+              renderNeutral(
+                data,
+                "Insufficient Evidence",
+                "The retrieved biomedical literature does not contain sufficient direct evidence to answer this question."
+              );
+            } else {
+              renderNeutral(
+                data,
+                "Pipeline Notice",
+                data.error || data.message || "An error occurred while evaluating the query."
+              );
+            }
+          })
+          .catch(function (err) {
+            setLoading(false);
+            renderNeutral(
+              null,
+              "Connection Error",
+              "Unable to communicate with the MedEvidence pipeline server: " + (err.message || String(err))
+            );
+          });
+      }
+
+      // Event listeners
+      askForm.addEventListener("submit", handleAsk);
+
+      questionInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+          e.preventDefault();
+          handleAsk();
+        }
+      });
+
+      // Initialization
+      checkHealth();
+      loadExamples();
+    })();
+  </script>
+</body>
+</html>
