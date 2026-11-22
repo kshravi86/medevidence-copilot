@@ -1,0 +1,103 @@
+{
+ "agent": {
+  "verdict_acc_all": 0.7051282051282052,
+  "strict_all": 0.6923076923076923,
+  "format_all": 1.0,
+  "verdict_acc_verbatim": 0.7333333333333333,
+  "strict_verbatim": 0.7111111111111111,
+  "format_verbatim": 1.0,
+  "verdict_acc_paraphrase": 0.76,
+  "strict_paraphrase": 0.76,
+  "format_paraphrase": 1.0,
+  "verdict_acc_boundary": 0.375,
+  "strict_boundary": 0.375,
+  "format_boundary": 1.0,
+  "macro_f1": 0.6239316239316239,
+  "citation_acc": 0.9615384615384616,
+  "grounded_acc": 0.9487179487179487,
+  "faithful_acc": 0.9615384615384616,
+  "hallucinated_pmids": 0,
+  "over_refusal_rate": 0.01282051282051282,
+  "over_refusal_boundary": 0,
+  "refusal_recall": 1.0,
+  "refusal_correct": 0.9545454545454546,
+  "emergency_refused": "7/7",
+  "format_errors": {},
+  "pred_dist": {
+   "yes": 38,
+   "no": 25,
+   "maybe": 13,
+   "null": 2
+  },
+  "n_items": 100,
+  "task_completion_rate": 1.0,
+  "avg_tool_calls": 7.82,
+  "avg_llm_calls": 3.38,
+  "avg_tokens": 4005.67,
+  "avg_cost_usd_est": 0.00023830550000000002,
+  "cost_assumption_usd_per_mtok": {
+   "in": 0.05,
+   "out": 0.2
+  },
+  "latency_median_s": 12.365182876586914,
+  "latency_p90_s": 15.72125792503357,
+  "json_repairs": 0,
+  "tool_errors": 0,
+  "gold_in_context": 0.9871794871794872,
+  "failure_taxonomy": {
+   "reasoning_error": 20,
+   "hallucination": 3,
+   "over_refusal": 1,
+   "refusal_wrong_category": 1
+  },
+  "critic": {
+   "approved_first_draft": 70,
+   "revised": 6,
+   "downgraded_to_maybe": 1,
+   "verdicts_fixed": 1,
+   "verdicts_broken": 1
+  },
+  "vs_baselines": {
+   "week1_bm25_fewshot (spec baseline b) :: strict": {
+    "agent": 0.6923076923076923,
+    "baseline": 0.5128205128205128,
+    "diff": 0.1794871794871795,
+    "ci95": [
+     0.07692307692307693,
+     0.28205128205128205
+    ],
+    "improvement": true
+   },
+   "week1_bm25_fewshot (spec baseline b) :: c1_verdict": {
+    "agent": 0.7051282051282052,
+    "baseline": 0.5769230769230769,
+    "diff": 0.1282051282051282,
+    "ci95": [
+     0.02564102564102564,
+     0.23076923076923078
+    ],
+    "improvement": true
+   },
+   "week2_bm25_top1 (stronger single prompt) :: strict": {
+    "agent": 0.6923076923076923,
+    "baseline": 0.6025641025641025,
+    "diff": 0.08974358974358974,
+    "ci95": [
+     0.0,
+     0.1794871794871795
+    ],
+    "improvement": false
+   },
+   "week2_bm25_top1 (stronger single prompt) :: c1_verdict": {
+    "agent": 0.7051282051282052,
+    "baseline": 0.6410256410256411,
+    "diff": 0.0641025641025641,
+    "ci95": [
+     -0.02564102564102564,
+     0.15384615384615385
+    ],
+    "improvement": false
+   }
+  }
+ }
+}

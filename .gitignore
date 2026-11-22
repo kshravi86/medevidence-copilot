@@ -231,3 +231,6 @@ __pycache__/
 app/logs/
 app/logs_run.txt
 app/feedback.jsonl
+
+# OpenTelemetry span dumps (large, regenerated on every run)
+results/traces/

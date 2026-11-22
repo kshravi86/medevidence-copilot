@@ -1,0 +1,16 @@
+# Runtime dependencies (versions tested on Python 3.12). torch is installed separately in the
+# Dockerfile from the CPU wheel index to keep the image small.
+httpx==0.28.1
+python-dotenv==1.2.4
+numpy==2.5.4
+pandas==3.1.1
+pyarrow==26.0.1
+rank-bm25==0.2.2
+sentence-transformers==6.3.0
+transformers==5.23.0
+torch==2.15.0
+tqdm==4.70.1
+opentelemetry-api==1.45.2
+opentelemetry-sdk==1.45.2
+streamlit==1.67.0
+requests==2.34.2

@@ -52,9 +52,12 @@ class Index:
 
 
 class Reranker:
-    def __init__(self, key, abstracts):
+    def __init__(self, key, abstracts, device=None):
+        import os
+
         from sentence_transformers import CrossEncoder
-        self.ce = CrossEncoder(RERANKERS[key], max_length=512, device="mps")
+        # Apple MPS locally; set RERANK_DEVICE=cpu (Docker/Linux) or cuda elsewhere
+        self.ce = CrossEncoder(RERANKERS[key], max_length=512, device=device or os.environ.get("RERANK_DEVICE", "mps"))
         self.abs = abstracts  # pmid -> text
         self.cache = {}
 

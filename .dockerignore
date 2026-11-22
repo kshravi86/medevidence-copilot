@@ -1,0 +1,14 @@
+.git
+.venv
+.env
+certs
+data
+.cache
+results
+notebooks
+docs
+capstone.zip
+*.parquet
+**/__pycache__
+app/logs
+app/feedback.jsonl
