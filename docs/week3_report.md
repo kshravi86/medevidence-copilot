@@ -68,6 +68,22 @@ Against the spec's baseline (b), both accuracy targets are met (+17.9 ≥ +10 st
 | Retrieval miss | 0 | Gold abstract in context for 77/78 items, and the one miss was an over-refusal |
 | Tool-call error | 0 | |
 
+## 4b. Long-answer quality (ROUGE-L) and the FAISS vector store
+
+ROUGE-L F1 between each explanation and the authors' conclusion (`gold_rationale`, scoring only), on the 78 answerable items; a missing explanation counts as 0 in the "all" column (`scripts/eval_rouge.py`, `results/rouge_l.json`):
+
+| Run | ROUGE-L, all 78 | ROUGE-L, answered | Right verdict | Wrong verdict |
+|---|---|---|---|---|
+| Week 1 closed-book few-shot | 0.201 | 0.201 | 0.220 | 0.186 |
+| Week 1 BM25 few-shot (baseline b) | 0.208 | 0.229 | 0.240 | 0.209 |
+| Week 2 BM25 top-1 | 0.206 | 0.226 | 0.237 | 0.202 |
+| Week 2 rerank top-3 | 0.221 | 0.227 | 0.237 | 0.207 |
+| **Week 3 agent** | **0.217** | **0.223** | **0.238** | **0.184** |
+
+ROUGE-L is flat across systems (0.20–0.22 with retrieval) and does not track strict accuracy: the agent is 18 points more accurate than baseline (b) with the same ROUGE-L. The conclusion is a short author summary while the explanations paraphrase the results section, so word overlap stays low even for correct answers. Explanations with a right verdict do overlap more (0.238 vs 0.184 for the agent). ROUGE-L is reported as a secondary long-answer metric; C4 (judge) remains the faithfulness criterion.
+
+Dense retrieval now runs on a FAISS index (`src/medevidence/vectorstore.py`, exact `IndexFlatIP` by default, HNSW optional). On the 100 eval queries it returns the same top-10 PMIDs as the previous numpy scan for every query (HNSW: 97–100% identical, same recall), so the Week 3 results above are unchanged by the switch (`results/faiss_check.json`).
+
 ## 5. Findings
 
 1. **Most of the gain comes from the safety gate and better retrieval, not the critic.** Refusal recall rose from 81.8% (Week 2) to 100%, and citation accuracy from 88.5% to 96.2% (multi-query hybrid + MedCPT reranking puts the gold abstract in context 98.7% of the time).

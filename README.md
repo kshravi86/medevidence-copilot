@@ -45,3 +45,21 @@ Docker (needs `.env`, `certs/` and `data/` in the repo folder; they are mounted,
 ```bash
 docker compose up --build    # UI: http://127.0.0.1:8501, API: http://127.0.0.1:8100
 ```
+
+## Vector store (FAISS) and ROUGE-L
+
+**FAISS.** Dense retrieval uses a FAISS index per chunking (`src/medevidence/vectorstore.py`) instead of a numpy scan.
+`IndexFlatIP` (exact, default) or `IndexHNSWFlat` (approximate, `FAISS_KIND=hnsw`) over the BGE embeddings;
+set `USE_FAISS=0` to fall back to numpy. Build once after `build_index.py` (the files live in the git-ignored `data/index/`):
+```bash
+.venv/bin/python scripts/build_faiss.py    # writes data/index/faiss_<chunking>_<flat|hnsw>.index, checks vs numpy
+```
+Check on the 100 eval queries (`results/faiss_check.json`): flat returns the identical top-10 PMIDs as numpy for every query;
+HNSW 97–100% identical, same R@1/R@5; under 0.3 ms per query.
+
+**ROUGE-L.** Longest-common-subsequence overlap between the generated explanation and the authors' conclusion
+(`gold_rationale`, used only for scoring), via Google's `rouge-score` with stemming (`src/medevidence/rouge.py`).
+```bash
+.venv/bin/python scripts/eval_rouge.py     # scores every Week 1-3 run from its saved rows -> results/rouge_l.json
+```
+`run_week3.py` also reports it per item (`rougeL`) and on average.

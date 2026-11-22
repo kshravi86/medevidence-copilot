@@ -213,3 +213,26 @@ def test_session_history_reaches_planner(tmp_path):
     llm.chat = spy
     Agent(llm, fake_tools(), sessions=store2).ask("and in children?", session_id="abc")
     assert "Does drug A help asthma?" in seen["planner_user"]
+
+
+# ------------------------------------------------------------------ FAISS store + ROUGE-L
+def test_faiss_flat_matches_numpy_ranking():
+    import numpy as np
+    from medevidence.vectorstore import FaissStore
+    rng = np.random.default_rng(0)
+    emb = rng.normal(size=(500, 32)).astype("float32")
+    emb /= np.linalg.norm(emb, axis=1, keepdims=True)
+    q = emb[7] + 0.01
+    _, rows = FaissStore.build(emb, "flat").search(q, 10)
+    assert list(rows[0]) == list(np.argsort(-(emb @ q))[:10])
+    _, hrows = FaissStore.build(emb, "hnsw").search(q, 10)
+    assert hrows[0][0] == 7
+
+
+def test_rouge_l():
+    from medevidence.rouge import rouge_l
+    ref = "Drug A reduced asthma exacerbations in adults."
+    assert rouge_l(ref, ref)["f"] == 1.0
+    assert rouge_l(None, ref)["f"] == 0.0
+    part = rouge_l("Drug A reduced exacerbations.", ref)
+    assert 0 < part["f"] < 1 and part["p"] == 1.0  # every predicted word is in the reference, in order

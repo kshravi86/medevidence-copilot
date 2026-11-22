@@ -1,0 +1,80 @@
+{
+ "abstract_flat": {
+  "vectors": 2000,
+  "build_s": 0.026,
+  "file_mb": 3.07,
+  "top10_identical_to_numpy": 1.0,
+  "top1_same_as_numpy": 1.0,
+  "R@1": 0.9743589743589743,
+  "R@5": 1.0,
+  "numpy_R@1": 0.9743589743589743,
+  "numpy_R@5": 1.0,
+  "ms_per_query": 0.241,
+  "numpy_ms_per_query": 0.152
+ },
+ "abstract_hnsw": {
+  "vectors": 2000,
+  "build_s": 0.255,
+  "file_mb": 3.62,
+  "top10_identical_to_numpy": 1.0,
+  "top1_same_as_numpy": 1.0,
+  "R@1": 0.9743589743589743,
+  "R@5": 1.0,
+  "numpy_R@1": 0.9743589743589743,
+  "numpy_R@5": 1.0,
+  "ms_per_query": 0.144,
+  "numpy_ms_per_query": 0.152
+ },
+ "section_flat": {
+  "vectors": 6557,
+  "build_s": 0.002,
+  "file_mb": 10.07,
+  "top10_identical_to_numpy": 1.0,
+  "top1_same_as_numpy": 1.0,
+  "R@1": 0.9871794871794872,
+  "R@5": 0.9871794871794872,
+  "numpy_R@1": 0.9871794871794872,
+  "numpy_R@5": 0.9871794871794872,
+  "ms_per_query": 0.26,
+  "numpy_ms_per_query": 0.536
+ },
+ "section_hnsw": {
+  "vectors": 6557,
+  "build_s": 0.333,
+  "file_mb": 11.85,
+  "top10_identical_to_numpy": 0.99,
+  "top1_same_as_numpy": 1.0,
+  "R@1": 0.9871794871794872,
+  "R@5": 0.9871794871794872,
+  "numpy_R@1": 0.9871794871794872,
+  "numpy_R@5": 0.9871794871794872,
+  "ms_per_query": 0.214,
+  "numpy_ms_per_query": 0.536
+ },
+ "window_flat": {
+  "vectors": 7120,
+  "build_s": 0.001,
+  "file_mb": 10.94,
+  "top10_identical_to_numpy": 1.0,
+  "top1_same_as_numpy": 1.0,
+  "R@1": 0.9743589743589743,
+  "R@5": 1.0,
+  "numpy_R@1": 0.9743589743589743,
+  "numpy_R@5": 1.0,
+  "ms_per_query": 0.272,
+  "numpy_ms_per_query": 0.578
+ },
+ "window_hnsw": {
+  "vectors": 7120,
+  "build_s": 0.341,
+  "file_mb": 12.87,
+  "top10_identical_to_numpy": 0.97,
+  "top1_same_as_numpy": 1.0,
+  "R@1": 0.9743589743589743,
+  "R@5": 1.0,
+  "numpy_R@1": 0.9743589743589743,
+  "numpy_R@5": 1.0,
+  "ms_per_query": 0.293,
+  "numpy_ms_per_query": 0.578
+ }
+}

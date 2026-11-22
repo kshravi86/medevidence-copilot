@@ -40,12 +40,27 @@ class Index:
         self.texts = [c["text"] for c in ch]
         self.bm = BM25(self.texts, self.pmids)
         self.emb = np.load(IDX / f"emb_{name}.npy")
+        from .vectorstore import FaissStore
+        self.faiss = FaissStore.load(name)  # None -> numpy brute force (USE_FAISS=0 or store not built)
 
     def bm25(self, q, k=100):
         return pmid_rank(self.bm.scores(q), self.pmids, k)
 
     def dense(self, qvec, k=100):
-        return pmid_rank(self.emb @ qvec, self.pmids, k)
+        if self.faiss is None:
+            return pmid_rank(self.emb @ qvec, self.pmids, k)
+        # FAISS returns the top chunks; keep each PMID's best chunk (same rule as pmid_rank)
+        scores, rows = self.faiss.search(qvec, k * 8)
+        best = {}
+        for s, i in zip(scores[0], rows[0]):
+            if i < 0:
+                continue
+            p = self.pmids[i]
+            if p not in best:
+                best[p] = float(s)
+                if len(best) >= k:
+                    break
+        return sorted(best.items(), key=lambda x: -x[1])
 
     def hybrid(self, q, qvec, k=100):
         return rrf([self.bm25(q, k), self.dense(qvec, k)], top=k)

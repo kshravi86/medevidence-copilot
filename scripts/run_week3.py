@@ -7,6 +7,7 @@ The agent is compared with both baselines using a paired bootstrap (10k resample
   - baseline (b) from the spec: Week 1 structured few-shot + BM25 top-1 (results/week1/bm25__fewshot.jsonl)
   - the stronger Week 2 single prompt, BM25 top-1 (results/week2/rag__abstract__bm25_1.jsonl)
 
+ROUGE-L (explanation vs the authors' conclusion) is reported per item and on average.
 Usage: python scripts/run_week3.py [--name agent] [--no-critic] [--limit N]
 Cost is an estimate: the course endpoint is free, so --price-in/--price-out (USD per 1M tokens) are assumptions.
 """
@@ -24,6 +25,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from tqdm import tqdm  # noqa: E402
 
 from medevidence import data, judge as J, metrics  # noqa: E402
+from medevidence.rouge import rouge_l  # noqa: E402
 
 OUT = ROOT / "results" / "week3"
 BASELINES = {"week1_bm25_fewshot (spec baseline b)": ROOT / "results/week1/bm25__fewshot.jsonl",
@@ -89,6 +91,8 @@ def main():
                 s["c4_faithful"], s["c4_unsupported"], s["judge_raw"] = J.faithful(j), j["unsupported"], j["raw"]
             else:
                 s["c4_faithful"] = False
+            expl = r.get("explanation") if r["status"] == "answered" else None
+            s["rougeL"] = round(rouge_l(expl, it["gold_rationale"])["f"], 4)  # vs authors' conclusion
         metrics.finish_strict(s)
         u = r["usage"]
         pt = sum(st.get("prompt_tokens", 0) for st in r["trace"])
@@ -126,6 +130,9 @@ def main():
         "tool_errors": sum(len(s["tool_errors"]) for s in rows),
         "gold_in_context": sum(bool(s["gold_in_context"]) for s in ans_rows) / max(1, len(ans_rows)),
         "failure_taxonomy": dict(Counter(s["failure"] for s in rows if s["failure"])),
+        "rougeL_all": sum(s["rougeL"] for s in ans_rows) / max(1, len(ans_rows)),
+        "rougeL_answered": (sum(s["rougeL"] for s in ans_rows if s["status"] == "answered")
+                            / max(1, sum(s["status"] == "answered" for s in ans_rows))),
         "critic": {
             "approved_first_draft": sum(1 for s in ans_rows if s["critic"] and s["critic"].get("approved") and s["critic"].get("revisions") == 0),
             "revised": sum(1 for s in ans_rows if s["critic"] and (s["critic"].get("revisions") or 0) > 0),
