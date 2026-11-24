@@ -74,9 +74,17 @@ def _clean(v):
 class Trace:
     """Per-request record of steps: what ran, how long, tokens, errors."""
 
-    def __init__(self):
+    def __init__(self, on_event=None):
         self.steps = []
         self.trace_id = None
+        self.on_event = on_event  # optional callback(event: dict) for live step streaming (the /eval page)
+
+    def _emit(self, event):
+        if self.on_event is not None:
+            try:
+                self.on_event(event)
+            except Exception:  # a broken listener must never break the agent
+                pass
 
     @contextmanager
     def span(self, name, **attrs):
@@ -86,6 +94,7 @@ class Trace:
         sp = cm.__enter__() if cm else None
         if sp is not None and self.trace_id is None:
             self.trace_id = format(sp.get_span_context().trace_id, "032x")
+        self._emit({"type": "start", "step": name, **{k: v for k, v in attrs.items() if v is not None}})
         try:
             yield step
         except Exception as e:
@@ -97,7 +106,12 @@ class Trace:
             step["ms"] = round((time.time() - step.pop("t0")) * 1000, 1)
             if sp is not None:
                 for k, v in step.items():
-                    if v is not None:
+                    if v is not None and not k.startswith("_"):
                         sp.set_attribute(k, _clean(v))
                 cm.__exit__(None, None, None)
+            # keys starting with "_" (full LLM outputs, tool results) go to the live stream only,
+            # so the stored trace and the OpenTelemetry spans stay small
+            public = {k: v for k, v in step.items() if not k.startswith("_")}
+            self._emit({"type": "end", **step})
+            step.clear(); step.update(public)
             self.steps.append(step)

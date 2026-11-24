@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MedEvidence Agent</title>
+<style>
+  :root { --bg:#fafaf8; --panel:#ffffff; --ink:#1c1c1a; --muted:#6b6b66; --line:#e3e2dc; --accent:#2b6cb0; --code:#f0efe9;
+          --ok:#2f855a; --ok-soft:#e6f4ec; --err:#b42318; --err-soft:#fdeceb; --warn:#b7791f; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#161614; --panel:#1f1f1c; --ink:#ecebe6; --muted:#9a9990; --line:#33332f; --accent:#6aa5e8; --code:#2a2a26;
+            --ok:#68d391; --ok-soft:#1d3326; --err:#f97066; --err-soft:#3b1f1d; --warn:#f6c66b; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  header { padding:14px 20px; border-bottom:1px solid var(--line); display:flex; gap:12px; align-items:baseline; flex-wrap:wrap; }
+  header h1 { font-size:16px; margin:0; }
+  header span { color:var(--muted); font-size:13px; }
+  main { max-width:900px; margin:0 auto; padding:16px 16px 140px; }
+  .msg { margin:18px 0; }
+  .who { font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
+  .user .body { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px 14px; white-space:pre-wrap; }
+
+  /* the "now doing" line */
+  .now { display:flex; align-items:center; gap:14px; padding:4px 2px; font-size:16px; }
+  .now .dots { display:inline-flex; gap:4px; width:24px; flex:none; }
+  .now .dots i { width:6px; height:6px; border-radius:50%; background:var(--ink); opacity:.3; animation:blink 1.2s infinite ease-in-out; }
+  .now .dots i:nth-child(2) { animation-delay:.2s; } .now .dots i:nth-child(3) { animation-delay:.4s; }
+  @keyframes blink { 0%,80%,100% { opacity:.25; transform:none; } 40% { opacity:1; transform:translateY(-3px); } }
+  .now .t { flex:1; } .now .t.swap { animation:fadein .3s ease-out; }
+  @keyframes fadein { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+  .now .clock { font:12px ui-monospace, Menlo, monospace; color:var(--muted); }
+  .now.done { display:none; }
+
+  /* answer */
+  .verdict { font-size:22px; font-weight:700; text-transform:uppercase; margin:2px 0 6px; }
+  .verdict.refused { color:var(--warn); text-transform:none; font-size:18px; }
+  .badges { display:flex; gap:6px; flex-wrap:wrap; margin:4px 0 8px; }
+  .badge { font-size:12px; padding:1px 9px; border-radius:99px; font-weight:600; }
+  .badge.ok { background:var(--ok-soft); color:var(--ok); } .badge.bad { background:var(--err-soft); color:var(--err); }
+  .bot p { margin:.45em 0; }
+  blockquote { margin:8px 0; padding:6px 12px; border-left:3px solid var(--accent); background:var(--code); border-radius:0 6px 6px 0; font-style:italic; }
+  .note { color:var(--muted); font-size:13px; }
+  .mono { font:13px ui-monospace, Menlo, monospace; }
+
+  /* steps, folded away */
+  details.steps { margin-top:10px; }
+  details.steps > summary { cursor:pointer; color:var(--accent); font-size:13px; }
+  .tool { border:1px solid var(--line); border-radius:10px; background:var(--panel); margin:8px 0; padding:8px 12px; }
+  .tool.child { margin-left:22px; }
+  .tool-h { display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+  .tool-h code { font-size:13px; font-weight:600; }
+  .tool-s { font-size:12px; color:var(--muted); }
+  .tool-w { font-size:12.5px; color:var(--muted); margin-top:2px; }
+  .kv { display:grid; grid-template-columns:140px 1fr; gap:2px 12px; margin-top:6px; font-size:13.5px; }
+  .kv .k { color:var(--muted); font-size:12.5px; }
+  .hit { font:12.5px ui-monospace, Menlo, monospace; }
+  .gold { color:var(--ok); font-weight:700; }
+  .tool details summary { cursor:pointer; color:var(--accent); font-size:12.5px; margin-top:4px; }
+  .tool details p { font-size:13px; white-space:pre-wrap; margin:6px 0 0; }
+
+  .examples { margin:20px 0 120px; }
+  .examples h2 { font-size:12px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); margin:18px 0 8px; }
+  .examples .chips { display:flex; flex-wrap:wrap; gap:8px; }
+  .examples button { background:var(--panel); border:1px solid var(--line); color:var(--ink); border-radius:999px; padding:6px 12px; cursor:pointer; font-size:13px; text-align:left; }
+  .examples button:hover { border-color:var(--accent); }
+  form { position:fixed; left:0; right:0; bottom:0; background:linear-gradient(transparent, var(--bg) 30%); padding:20px 16px 16px; }
+  .row { max-width:900px; margin:0 auto; display:flex; gap:8px; }
+  textarea { flex:1; resize:none; background:var(--panel); color:var(--ink); border:1px solid var(--line); border-radius:10px; padding:10px 12px; font:inherit; min-height:46px; max-height:160px; }
+  textarea:focus { outline:2px solid var(--accent); outline-offset:-1px; }
+  button.send { background:var(--accent); color:#fff; border:0; border-radius:10px; padding:0 18px; font:inherit; cursor:pointer; }
+  button.send:disabled { opacity:.5; cursor:default; }
+  @media (max-width:600px) { .kv { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header><h1>MedEvidence Copilot: ask the agent</h1><span id="info">connecting…</span></header>
+<main id="chat">
+  <div class="examples" id="examples"></div>
+</main>
+<form id="form"><div class="row">
+  <textarea id="q" rows="1" placeholder="Ask a medical research question…" autofocus></textarea>
+  <button class="send" id="send" type="submit">Ask</button>
+</div></form>
+
+<script>
+const $ = (s, el = document) => el.querySelector(s);
+const esc = (t) => String(t ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const chat = $("#chat"), form = $("#form"), q = $("#q"), send = $("#send");
+
+// A few questions from the frozen eval set; any typed question works too.
+const EXAMPLES = {
+  "Should answer yes": ["Q003", "Q010", "Q001", "Q011"],
+  "Should answer no": ["Q065", "Q026", "Q075"],
+  "Should answer maybe": ["Q062", "Q041"],
+  "Should be refused": ["Q080", "Q087", "Q094", "Q100"],
+};
+let BYQ = {}, BYID = {};
+
+const WHAT = {
+  "safety_gate": "Code rules check the question (emergency, personal dosing, personal diagnosis), then a model double-checks.",
+  "llm.safety": "Model call: research question, or a personal / emergency request?",
+  "llm.planner": "Model call: rewrite as a research question and choose up to 3 searches.",
+  "llm.replan": "Model call: nothing relevant found, so choose different searches.",
+  "tool.search_abstracts": "Hybrid search over 2,000 abstracts (BM25 + FAISS vectors), reranked with MedCPT.",
+  "tool.get_abstract": "Open one of the top abstracts for the executor to read.",
+  "llm.executor": "Model call: draft the verdict, explanation, verbatim quote and PMID.",
+  "tool.verify_quote": "Code check: is the quote copied word for word from the cited abstract?",
+  "tool.conclusion_sentences": "Pull the abstract's conclusion for the critic.",
+  "llm.critic": "Model call: an independent reviewer checks the draft.",
+};
+
+function nowText(ev, nRead) {
+  const qq = (t) => `“${String(t || "").slice(0, 90)}${String(t || "").length > 90 ? "…" : ""}”`;
+  switch (ev.step) {
+    case "agent.ask": return "Starting the agent";
+    case "safety_gate": return "Checking the question against the safety rules";
+    case "llm.safety": return "Asking the model whether this is a research question or a personal / emergency request";
+    case "llm.planner": return "Planning: rewriting the question as a research question and choosing searches";
+    case "llm.replan": return "Nothing relevant found: planning different searches";
+    case "tool.search_abstracts": return `Searching 2,000 abstracts for ${qq(ev.query)}`;
+    case "tool.get_abstract": return `Reading abstract PMID ${ev.pmid}`;
+    case "llm.executor": return `Drafting the answer from ${nRead || "the"} abstract${nRead === 1 ? "" : "s"} read`;
+    case "tool.verify_quote": return `Checking the quote is word for word in PMID ${ev.pmid}`;
+    case "tool.conclusion_sentences": return `Pulling the conclusion of PMID ${ev.pmid} for the reviewer`;
+    case "llm.critic": return "Critic reviewing the draft: does the abstract answer the question, and is the verdict supported?";
+    default: return ev.step;
+  }
+}
+
+async function init() {
+  try {
+    const h = await (await fetch("/api/health")).json();
+    $("#info").textContent = `${h.docs} abstracts indexed · ${h.mode} mode · every step runs live (no cache)`;
+  } catch (e) { $("#info").textContent = "server not reachable"; }
+  try {
+    const rows = await (await fetch("/api/eval_set")).json();
+    for (const r of rows) { BYQ[r.query.trim().toLowerCase()] = r; BYID[r.id] = r; }
+  } catch (e) {}
+  $("#examples").innerHTML = Object.entries(EXAMPLES).map(([h, ids]) =>
+    `<h2>${esc(h)}</h2><div class="chips">${ids.filter((id) => BYID[id]).map((id) =>
+      `<button type="button" data-q="${esc(BYID[id].query)}">${esc(BYID[id].query)}</button>`).join("")}</div>`).join("") +
+    `<p class="note" style="margin-top:18px">Sample questions from the frozen eval set: the answer is checked against its gold label and PMID. You can also type your own question.</p>`;
+}
+$("#examples").addEventListener("click", (e) => { const b = e.target.closest("button[data-q]"); if (b) ask(b.dataset.q); });
+
+q.addEventListener("input", () => { q.style.height = "auto"; q.style.height = Math.min(q.scrollHeight, 160) + "px"; });
+q.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); } });
+form.addEventListener("submit", (e) => { e.preventDefault(); const t = q.value.trim(); if (t && !send.disabled) { q.value = ""; q.style.height = "auto"; ask(t); } });
+
+async function ask(question) {
+  $("#examples")?.remove();
+  send.disabled = true;
+  const gold = BYQ[question.trim().toLowerCase()] || null;
+  chat.insertAdjacentHTML("beforeend", `<div class="msg user"><div class="who">You${gold ? ` · eval ${gold.id}` : ""}</div><div class="body">${esc(question)}</div></div>`);
+  const bot = document.createElement("div");
+  bot.className = "msg bot";
+  bot.innerHTML = `<div class="who">Agent</div>
+    <div class="now"><span class="dots"><i></i><i></i><i></i></span><span class="t">Sending the question to the agent</span><span class="clock">0.0 s</span></div>
+    <div class="answer"></div>
+    <details class="steps"><summary>Show the steps</summary><div class="list"></div></details>`;
+  chat.appendChild(bot);
+  bot.scrollIntoView({ block: "end", behavior: "smooth" });
+  const now = $(".now", bot), list = $(".list", bot), t0 = performance.now();
+  const timer = setInterval(() => { $(".clock", now).textContent = ((performance.now() - t0) / 1000).toFixed(1) + " s"; }, 100);
+  const setNow = (text) => { const el = $(".t", now); if (el.textContent === text) return; el.textContent = text; el.classList.remove("swap"); void el.offsetWidth; el.classList.add("swap"); };
+  const stack = []; let n = 0, nRead = 0;
+
+  try {
+    const resp = await fetch("/api/ask_stream", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question, fresh: true }) });
+    const reader = resp.body.getReader(), dec = new TextDecoder();
+    let buf = "";
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      let i;
+      while ((i = buf.indexOf("\n\n")) >= 0) {
+        const line = buf.slice(0, i); buf = buf.slice(i + 2);
+        if (!line.startsWith("data: ")) continue;
+        const ev = JSON.parse(line.slice(6));
+        if (ev.type === "queued") setNow("Waiting for the model to be free (one question at a time)");
+        else if (ev.type === "start") {
+          setNow(nowText(ev, nRead));
+          if (ev.step === "agent.ask") { stack.push(null); continue; }
+          const el = document.createElement("div");
+          el.className = "tool" + (stack.some((x) => x && x.dataset.step === "safety_gate") ? " child" : "");
+          el.dataset.step = ev.step;
+          el.innerHTML = `<div class="tool-h"><code>${++n}. ${esc(ev.step)}</code><span class="tool-s">running…</span></div><div class="tool-w">${esc(WHAT[ev.step] || "")}</div><div class="b"></div>`;
+          list.appendChild(el); stack.push(el);
+        } else if (ev.type === "end") {
+          if (ev.step === "tool.get_abstract" && ev.ok) nRead++;
+          const el = stack.pop(); if (!el) continue;
+          const bits = [];
+          if (ev.prompt_tokens != null) bits.push(`${ev.prompt_tokens} in · ${ev.completion_tokens} out`);
+          if (ev.cached != null) bits.push(ev.cached ? "from cache" : "live");
+          bits.push(fmtMs(ev.ms));
+          $(".tool-s", el).textContent = bits.join(" · ");
+          if (ev.error || ev.ok === false) $(".tool-s", el).style.color = "var(--err)";
+          $(".b", el).innerHTML = stepBody(ev, gold);
+        } else if (ev.type === "result") {
+          clearInterval(timer);
+          now.classList.add("done");
+          $(".answer", bot).innerHTML = answerHtml(ev.result, gold, ev.t);
+          $(".steps summary", bot).textContent = `Show the ${n} steps`;
+        }
+      }
+    }
+  } catch (e) {
+    clearInterval(timer); now.classList.add("done");
+    $(".answer", bot).innerHTML = `<p class="note" style="color:var(--err)">Error: ${esc(e.message)}</p>`;
+  } finally {
+    clearInterval(timer); send.disabled = false; q.focus();
+    bot.scrollIntoView({ block: "end", behavior: "smooth" });
+  }
+}
+
+function fmtMs(ms) { return ms >= 1000 ? (ms / 1000).toFixed(1) + " s" : Math.round(ms * 10) / 10 + " ms"; }
+
+function answerHtml(res, gold, secs) {
+  const b = [];
+  if (gold) {
+    if (gold.expected_behavior === "refuse") b.push(res.status === "refused" ? `<span class="badge ok">correctly refused</span>` : `<span class="badge bad">should have been refused</span>`);
+    else if (res.status === "answered") {
+      const vOk = res.verdict === gold.gold_label, pOk = res.citation_pmid === gold.gold_pmid;
+      b.push(`<span class="badge ${vOk ? "ok" : "bad"}">verdict ${vOk ? "matches" : "≠"} gold (${esc(gold.gold_label)})</span>`,
+             `<span class="badge ${pOk ? "ok" : "bad"}">PMID ${pOk ? "matches" : "≠"} gold (${esc(gold.gold_pmid)})</span>`);
+    } else b.push(`<span class="badge bad">gold expects ${esc(gold.gold_label)}</span>`);
+  }
+  if (res.status === "answered") b.push(`<span class="badge ${res.quote_verified ? "ok" : "bad"}">quote ${res.quote_verified ? "verified" : "not verbatim"}</span>`);
+  const u = res.usage || {}, c = res.critic;
+  const head = res.status === "answered" ? `<div class="verdict">${esc(res.verdict)}</div>`
+    : `<div class="verdict refused">${res.status === "refused" ? "Refused" : res.status === "insufficient_evidence" ? "No relevant evidence found" : "Error"}</div>`;
+  return `${head}<div class="badges">${b.join("")}</div>
+    ${res.message ? `<p>${esc(res.message)}</p>` : ""}
+    ${res.explanation ? `<p>${esc(res.explanation)}</p>` : ""}
+    ${res.evidence_quote ? `<blockquote>${esc(res.evidence_quote)}</blockquote><div class="note">Source: PMID <span class="mono">${esc(res.citation_pmid)}</span></div>` : ""}
+    ${res.error ? `<p class="note" style="color:var(--err)">${esc(res.error)}</p>` : ""}
+    <div class="note" style="margin-top:6px">${c && c.approved != null ? `Critic ${c.approved ? "approved" : "did not approve"}${c.revisions ? ` after ${c.revisions} revision(s)` : ""}${c.downgraded ? ", downgraded to maybe" : ""} · ` : ""}${u.llm_calls ?? 0} model calls · ${u.tool_calls ?? 0} tool calls · ${(u.tokens ?? 0).toLocaleString()} tokens · ${secs.toFixed(1)} s</div>`;
+}
+
+function stepBody(ev, gold) {
+  const o = ev._output || {}, v = ev._result, gp = gold && gold.gold_pmid;
+  const pm = (p) => `<span class="mono ${p && p === gp ? "gold" : ""}">${esc(p)}${p && p === gp ? " ★ gold" : ""}</span>`;
+  const err = ev.error ? `<div class="kv"><span class="k">error</span><span style="color:var(--err)">${esc(ev.error)}</span></div>` : "";
+  const yn = (x) => x === true ? "yes" : x === false ? "no" : "—";
+  switch (ev.step) {
+    case "safety_gate":
+      return `<div class="kv"><span class="k">code rule</span><span>${esc(ev.rule_category || "none")}</span>
+        <span class="k">model classifier</span><span>${esc(ev.llm_category || "none")}</span>
+        <span class="k">decision</span><span>${ev.category ? `<b style="color:var(--warn)">refuse: ${esc(ev.category)}</b>` : "pass"}</span></div>${err}`;
+    case "llm.safety":
+      return `<div class="kv"><span class="k">model says</span><span class="mono">${esc(o.category || "")}${o.reason ? ` · ${esc(o.reason)}` : ""}</span></div>${err}`;
+    case "llm.planner": case "llm.replan":
+      return `<div class="kv">${o.research_question ? `<span class="k">research question</span><span>${esc(o.research_question)}</span>` : ""}
+        <span class="k">searches</span><span>${(o.queries || []).map((x) => `• ${esc(x)}`).join("<br>") || "—"}</span></div>${err}`;
+    case "tool.search_abstracts": {
+      const hits = Array.isArray(v) ? v : [];
+      return `<div class="kv"><span class="k">query</span><span>${esc(ev.query)}</span>
+        <span class="k">top ${hits.length}</span><span>${hits.map((h) => `<span class="hit">${pm(h.pmid)} ${h.score.toFixed(3)}</span>`).join("<br>")}</span></div>${err}`;
+    }
+    case "tool.get_abstract":
+      return v ? `<div class="kv"><span class="k">PMID</span><span>${pm(v.pmid)}${v.year ? ` · ${esc(v.year)}` : ""}</span></div>
+        <details><summary>Read the abstract</summary><p>${esc(v.text)}</p></details>` : err;
+    case "llm.executor":
+      return `<div class="kv">${o.verdict ? `<span class="k">draft verdict</span><span><b>${esc(o.verdict)}</b>${o.confidence ? ` (confidence ${esc(o.confidence)})` : ""}</span>` : `<span class="k">status</span><span>${esc(o.status)}</span>`}
+        ${o.citation_pmid ? `<span class="k">cites</span><span>${pm(String(o.citation_pmid))}</span>` : ""}
+        ${o.evidence_quote ? `<span class="k">quote</span><span><i>${esc(o.evidence_quote)}</i></span>` : ""}</div>${err}`;
+    case "tool.verify_quote":
+      return `<div class="kv"><span class="k">verbatim</span><span>${v ? `<b style="color:var(--ok)">yes</b>` : `<b style="color:var(--err)">no</b>`}</span></div>${err}`;
+    case "tool.conclusion_sentences":
+      return `<div class="kv"><span class="k">conclusion</span><span>${(v || []).map(esc).join(" ")}</span></div>${err}`;
+    case "llm.critic":
+      return `<div class="kv"><span class="k">abstract matches</span><span>${yn(o.abstract_matches_question)}</span>
+        <span class="k">verdict supported</span><span>${yn(o.verdict_supported)}${o.correct_verdict ? ` · reads it as <b>${esc(o.correct_verdict)}</b>` : ""}</span>
+        <span class="k">faithful</span><span>${yn(o.explanation_faithful)}</span>
+        ${o.feedback && o.feedback !== "ok" ? `<span class="k">feedback</span><span>${esc(o.feedback)}</span>` : ""}</div>${err}`;
+    default: return err;
+  }
+}
+
+init();
+</script>
+</body>
+</html>

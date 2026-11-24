@@ -5,6 +5,8 @@ Constraints from the Learner Guide: 1 active request per group key, 60 req/min,
 lock, retry 429/503 with 2/4/8 s backoff, and cache every response on disk so that
 re-running an experiment is free and deterministic.
 """
+import contextlib
+import contextvars
 import hashlib
 import json
 import sqlite3
@@ -33,6 +35,24 @@ class ChatResult:
         return self.texts[0]
 
 
+# Per-request switch: inside `with no_cache():` model calls and embeddings skip the disk caches
+# (no read, no write), so every step runs live and the cached eval answers are left untouched.
+_NO_CACHE = contextvars.ContextVar("medevidence_no_cache", default=False)
+
+
+@contextlib.contextmanager
+def no_cache():
+    tok = _NO_CACHE.set(True)
+    try:
+        yield
+    finally:
+        _NO_CACHE.reset(tok)
+
+
+def cache_off():
+    return _NO_CACHE.get()
+
+
 class LLM:
     def __init__(self, cache_name="llm.sqlite"):
         self.base = env("LLM_BASE_URL").rstrip("/")
@@ -52,7 +72,8 @@ class LLM:
         if json_mode:
             body["response_format"] = {"type": "json_object"}
         key = hashlib.sha256(json.dumps(body, sort_keys=True).encode()).hexdigest()
-        row = self.db.execute("SELECT v FROM c WHERE k=?", (key,)).fetchone()
+        fresh = cache_off()
+        row = None if fresh else self.db.execute("SELECT v FROM c WHERE k=?", (key,)).fetchone()
         if row:
             d = json.loads(row[0])
             return ChatResult(d["texts"], d["pt"], d["ct"], d["lat"], cached=True)
@@ -75,10 +96,11 @@ class LLM:
                     u = d.get("usage", {})
                     res = ChatResult(texts, u.get("prompt_tokens", 0),
                                      u.get("completion_tokens", 0), time.time() - t0)
-                    self.db.execute("INSERT OR REPLACE INTO c VALUES (?,?)", (key, json.dumps(
-                        {"texts": texts, "pt": res.prompt_tokens, "ct": res.completion_tokens,
-                         "lat": res.latency})))
-                    self.db.commit()
+                    if not fresh:
+                        self.db.execute("INSERT OR REPLACE INTO c VALUES (?,?)", (key, json.dumps(
+                            {"texts": texts, "pt": res.prompt_tokens, "ct": res.completion_tokens,
+                             "lat": res.latency})))
+                        self.db.commit()
                     return res
                 status = None if r is None else r.status_code
                 if status in (None, 429, 503) and attempt < retries:

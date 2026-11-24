@@ -7,6 +7,11 @@ Endpoints
   GET  /api/examples     example questions
   POST /api/ask          {"question": str, "session_id"?: str} -> answer JSON (+ "cached", "session_id")
   POST /api/feedback     appends one JSON line to app/feedback.jsonl
+  GET  /eval             the 100-question eval viewer (app/static/eval.html): click a question, watch each step
+  GET  /api/eval_set     the frozen eval set (eval/eval_set.jsonl) with gold answers
+  POST /api/ask_stream   {"question": str} -> text/event-stream: one event per step start/end, then the result
+                         (agent mode only; "fresh": true (default) bypasses every cache, so each model call
+                         and embedding runs live; "fresh": false allows the LLM/embedding caches)
 
 Settings (environment)
   MEDEVIDENCE_MODE   agent (default: safety gate -> planner -> executor -> critic) | rag (Week 2 single pass)
@@ -159,6 +164,19 @@ EXAMPLES = [
 ]
 
 
+EVAL_PATH = ROOT / "eval" / "eval_set.jsonl"
+_eval_rows = None
+
+
+def eval_rows():
+    global _eval_rows
+    if _eval_rows is None:
+        keep = ("id", "query", "query_type", "expected_behavior", "gold_label", "gold_pmid", "gold_rationale")
+        with open(EVAL_PATH, encoding="utf-8") as f:
+            _eval_rows = [{k: r.get(k) for k in keep} for r in map(json.loads, f) if r]
+    return _eval_rows
+
+
 def error_result(question, msg):
     return {"question": question, "status": "error", "error": msg, "refusal_category": None, "verdict": None,
             "explanation": None, "evidence_quote": None, "citation_pmid": None, "quote_verified": False,
@@ -206,6 +224,13 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(500, {"ok": False, "docs": 0, "error": str(e)})
         if path == "/api/examples":
             return self._json(200, EXAMPLES)
+        if path == "/eval":
+            return self._file(STATIC_DIR / "eval.html", "text/html; charset=utf-8")
+        if path == "/api/eval_set":
+            try:
+                return self._json(200, eval_rows())
+            except OSError as e:
+                return self._json(500, {"error": f"eval set not found: {e}"})
         if path.startswith("/static/"):
             target = (STATIC_DIR / path[len("/static/"):].lstrip("/")).resolve()
             if STATIC_DIR in target.parents and target.is_file():
@@ -257,6 +282,9 @@ class Handler(BaseHTTPRequestHandler):
                 CACHE.put(question, {k: v for k, v in res.items() if k != "session_id"})
             return self._json(200, res)
 
+        if path == "/api/ask_stream":
+            return self._ask_stream(str(body.get("question") or ""), fresh=bool(body.get("fresh", True)))
+
         if path == "/api/feedback":
             with _feedback_lock:
                 try:
@@ -267,6 +295,42 @@ class Handler(BaseHTTPRequestHandler):
                     return self._json(500, {"ok": False, "error": f"Failed to record feedback: {e}"})
             return self._json(200, {"ok": True})
         self.send_error(404, "Not Found")
+
+    def _ask_stream(self, question, fresh=True):
+        """Server-sent events: {"type": "start"|"end", "step": ...} per agent step, then {"type": "result"}."""
+        self.send_response(200)
+        self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+        self.send_header("Cache-Control", "no-cache")
+        self.send_header("Connection", "close")
+        self.end_headers()
+        t0 = time.time()
+
+        def send(ev):
+            ev["t"] = round(time.time() - t0, 3)
+            self.wfile.write(f"data: {json.dumps(ev, default=str, ensure_ascii=False)}\n\n".encode())
+            self.wfile.flush()
+
+        try:
+            if MODE != "agent":
+                return send({"type": "result", "result": error_result(question, "The live view needs MEDEVIDENCE_MODE=agent")})
+            send({"type": "queued"})
+            with _ask_lock:  # the shared LLM key allows one active request
+                send({"type": "begin"})
+                from medevidence.llm import no_cache
+                if fresh:  # every model call and embedding runs live; nothing read from or written to the caches
+                    with no_cache():
+                        res = get_backend().ask(question, on_event=send)
+                else:
+                    res = get_backend().ask(question, on_event=send)
+            res["cached"] = False
+            send({"type": "result", "result": res})
+        except (BrokenPipeError, ConnectionResetError):
+            pass  # the page was closed or another question was clicked
+        except Exception as e:
+            try:
+                send({"type": "result", "result": error_result(question, str(e))})
+            except OSError:
+                pass
 
     def log_message(self, fmt, *args):  # no request bodies in logs
         sys.stderr.write(f"[{self.log_date_time_string()}] {self.address_string()} - {fmt % args}\n")

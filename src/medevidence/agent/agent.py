@@ -58,6 +58,7 @@ class Agent:
                 raw = res.text
                 obj, err = metrics.parse_json(raw)
                 if obj is not None:
+                    sp["_output"] = obj
                     return obj, raw
                 sp["parse_error"] = err
             st.json_repairs += 1
@@ -74,15 +75,18 @@ class Agent:
             st.tool_calls += 1
             st.budget.charge(1)
             sp.update(ok=res.ok, **{f"meta_{k}": v for k, v in res.meta.items()})
+            if tr.on_event is not None:
+                sp["_result"] = res.value
             if not res.ok:
                 sp["error"] = res.error
                 st.tool_errors.append({"tool": name, "error": res.error})
         return res
 
     # ---------------------------------------------------------------- public API
-    def ask(self, question, session_id=None):
+    def ask(self, question, session_id=None, on_event=None):
+        """on_event: optional callback that receives each step as it starts and ends (live view)."""
         t0 = time.time()
-        tr = Trace()
+        tr = Trace(on_event)
         st = AgentState(question=question, session_id=session_id, budget=Budget(**self.budget_cfg))
         out = {"question": question, "session_id": session_id, "status": "error", "refusal_category": None,
                "verdict": None, "explanation": None, "evidence_quote": None, "citation_pmid": None,

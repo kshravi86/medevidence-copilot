@@ -70,10 +70,12 @@ class Embedder:
 
     def embed(self, texts, progress=False):
         """Return L2-normalised (len(texts), 384) float32 matrix; cached on disk."""
+        from .llm import cache_off
+        fresh = cache_off()
         out = [None] * len(texts)
         todo = []
         for i, t in enumerate(texts):
-            row = self.db.execute("SELECT v FROM e WHERE k=?", (self._key(t),)).fetchone()
+            row = None if fresh else self.db.execute("SELECT v FROM e WHERE k=?", (self._key(t),)).fetchone()
             if row:
                 out[i] = np.frombuffer(row[0], dtype=np.float32)
             else:
@@ -86,8 +88,10 @@ class Embedder:
                 vecs = [self._one_truncating(texts[i]) for i in idx]
             for i, v in zip(idx, vecs):
                 out[i] = v
-                self.db.execute("INSERT OR REPLACE INTO e VALUES (?,?)", (self._key(texts[i]), v.tobytes()))
-            self.db.commit()
+                if not fresh:
+                    self.db.execute("INSERT OR REPLACE INTO e VALUES (?,?)", (self._key(texts[i]), v.tobytes()))
+            if not fresh:
+                self.db.commit()
             if progress and (s // 16) % 25 == 0:
                 print(f"  embedded {s + len(idx)}/{len(todo)}", flush=True)
         m = np.vstack(out)
