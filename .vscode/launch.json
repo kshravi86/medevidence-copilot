@@ -1,0 +1,117 @@
+{
+  // Debug configurations for MedEvidence Copilot. Run from the Run and Debug panel (Cmd+Shift+D) or press F5.
+  // Breakpoints work in scripts/, src/medevidence/ and app/. Set "justMyCode": false to also step into libraries.
+  "version": "0.2.0",
+  "inputs": [
+    {
+      "id": "steps",
+      "type": "pickString",
+      "description": "Walkthrough steps to run",
+      "options": [
+        "check,safety,demo,followup",
+        "demo",
+        "safety",
+        "samples",
+        "results",
+        "rouge",
+        "api",
+        "api,ui",
+        "all"
+      ],
+      "default": "check,safety,demo,followup"
+    },
+    {
+      "id": "ids",
+      "type": "promptString",
+      "description": "Question IDs for the samples step",
+      "default": "Q003,Q100"
+    }
+  ],
+  "configurations": [
+    {
+      "name": "Walkthrough: default steps",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/walkthrough_week3_4.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "env": { "RERANK_DEVICE": "mps", "PYTHONUNBUFFERED": "1" },
+      "justMyCode": true
+    },
+    {
+      "name": "Walkthrough: choose steps",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/walkthrough_week3_4.py",
+      "args": ["--steps", "${input:steps}", "--ids", "${input:ids}"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "env": { "RERANK_DEVICE": "mps", "PYTHONUNBUFFERED": "1" },
+      "justMyCode": true
+    },
+    {
+      "name": "Walkthrough: Q003 demo only",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/walkthrough_week3_4.py",
+      "args": ["--steps", "demo"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "env": { "RERANK_DEVICE": "mps", "PYTHONUNBUFFERED": "1" },
+      "justMyCode": true
+    },
+    {
+      "name": "API server (agent mode, port 8110)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/app/server.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "env": {
+        "HOST": "127.0.0.1", "PORT": "8110", "MEDEVIDENCE_MODE": "agent",
+        "RATE_LIMIT_PER_MIN": "10", "RATE_LIMIT_BURST": "5", "CACHE_TTL_S": "3600",
+        "RERANK_DEVICE": "mps", "PYTHONUNBUFFERED": "1"
+      },
+      "justMyCode": true
+    },
+    {
+      "name": "Streamlit UI (against the API on 8110)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "streamlit",
+      "args": ["run", "app/streamlit_app.py", "--server.port=8502", "--server.headless=true"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "env": { "API_URL": "http://127.0.0.1:8110" },
+      "justMyCode": true
+    },
+    {
+      "name": "Current file",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "env": { "RERANK_DEVICE": "mps", "PYTHONUNBUFFERED": "1" },
+      "justMyCode": true
+    },
+    {
+      "name": "Tests (pytest)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["-q", "tests"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "env": { "RERANK_DEVICE": "mps" },
+      "justMyCode": true
+    }
+  ],
+  "compounds": [
+    {
+      "name": "API + Streamlit UI",
+      "configurations": ["API server (agent mode, port 8110)", "Streamlit UI (against the API on 8110)"],
+      "stopAll": true
+    }
+  ]
+}
