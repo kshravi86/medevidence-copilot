@@ -6,10 +6,10 @@
 <title>MedEvidence Agent</title>
 <style>
   :root { --bg:#fafaf8; --panel:#ffffff; --ink:#1c1c1a; --muted:#6b6b66; --line:#e3e2dc; --accent:#2b6cb0; --code:#f0efe9;
-          --ok:#2f855a; --ok-soft:#e6f4ec; --err:#b42318; --err-soft:#fdeceb; --warn:#b7791f; }
+          --llm:#c05621; --llm-soft:#fdf0e6; --ok:#2f855a; --ok-soft:#e6f4ec; --err:#b42318; --err-soft:#fdeceb; --warn:#b7791f; }
   @media (prefers-color-scheme: dark) {
     :root { --bg:#161614; --panel:#1f1f1c; --ink:#ecebe6; --muted:#9a9990; --line:#33332f; --accent:#6aa5e8; --code:#2a2a26;
-            --ok:#68d391; --ok-soft:#1d3326; --err:#f97066; --err-soft:#3b1f1d; --warn:#f6c66b; }
+            --llm:#f6ad55; --llm-soft:#3a2a1a; --ok:#68d391; --ok-soft:#1d3326; --err:#f97066; --err-soft:#3b1f1d; --warn:#f6c66b; }
   }
   * { box-sizing: border-box; }
   body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
@@ -42,12 +42,28 @@
   blockquote { margin:8px 0; padding:6px 12px; border-left:3px solid var(--accent); background:var(--code); border-radius:0 6px 6px 0; font-style:italic; }
   .note { color:var(--muted); font-size:13px; }
   .mono { font:13px ui-monospace, Menlo, monospace; }
+  a.pm { color:var(--accent); text-decoration:none; } a.pm:hover { text-decoration:underline; }
+  .bot a { color:var(--accent); }
 
   /* steps, folded away */
   details.steps { margin-top:10px; }
   details.steps > summary { cursor:pointer; color:var(--accent); font-size:13px; }
   .tool { border:1px solid var(--line); border-radius:10px; background:var(--panel); margin:8px 0; padding:8px 12px; }
   .tool.child { margin-left:22px; }
+  .tool.llm { border-color:var(--llm); border-left:4px solid var(--llm); background:var(--llm-soft); }
+  .kind { font:600 10.5px/1 -apple-system, sans-serif; letter-spacing:.06em; padding:3px 7px; border-radius:99px; margin-right:8px; vertical-align:1px;
+          border:1px solid var(--line); color:var(--muted); }
+  .kind.llm { background:var(--llm); border-color:var(--llm); color:#fff; }
+  @media (prefers-color-scheme: dark) { .kind.llm { color:#1c1c1a; } }
+  .now .kind { margin:0; }
+  /* run timeline: every step in order, model calls in orange */
+  .flow { display:flex; flex-wrap:wrap; gap:4px; align-items:center; margin:8px 0 2px; font-size:12px; }
+  .flow .f { padding:2px 8px; border-radius:99px; border:1px solid var(--line); color:var(--muted); background:var(--panel); }
+  .flow .f.llm { background:var(--llm); border-color:var(--llm); color:#fff; font-weight:600; }
+  @media (prefers-color-scheme: dark) { .flow .f.llm { color:#1c1c1a; } }
+  .flow .a { color:var(--muted); }
+  .flow-legend { font-size:12px; color:var(--muted); }
+  .flow-legend b { color:var(--llm); }
   .tool-h { display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
   .tool-h code { font-size:13px; font-weight:600; }
   .tool-s { font-size:12px; color:var(--muted); }
@@ -90,10 +106,10 @@ const chat = $("#chat"), form = $("#form"), q = $("#q"), send = $("#send");
 
 // A few questions from the frozen eval set; any typed question works too.
 const EXAMPLES = {
-  "Should answer yes": ["Q003", "Q010", "Q001", "Q011"],
-  "Should answer no": ["Q065", "Q026", "Q075"],
-  "Should answer maybe": ["Q062", "Q041"],
-  "Should be refused": ["Q080", "Q087", "Q094", "Q100"],
+  "Should answer yes": ["Q003", "Q010", "Q001", "Q011", "Q008", "Q009", "Q046", "Q050", "Q063", "Q069", "Q070", "Q072"],
+  "Should answer no": ["Q065", "Q026", "Q075", "Q005", "Q015", "Q021", "Q034", "Q051", "Q053", "Q064", "Q077"],
+  "Should answer maybe": ["Q062", "Q041", "Q018", "Q042", "Q047", "Q056", "Q078"],
+  "Should be refused": ["Q080", "Q087", "Q094", "Q100", "Q079", "Q084", "Q089", "Q090", "Q096", "Q098"],
 };
 let BYQ = {}, BYID = {};
 
@@ -130,11 +146,12 @@ function nowText(ev, nRead) {
 
 async function init() {
   try {
-    const h = await (await fetch("/api/health")).json();
+    const h = await (await fetch("api/health")).json();
+    TRACE_UI = (h.trace_ui || "").replace(/\/+$/, "");
     $("#info").textContent = `${h.docs} abstracts indexed · ${h.mode} mode · every step runs live (no cache)`;
   } catch (e) { $("#info").textContent = "server not reachable"; }
   try {
-    const rows = await (await fetch("/api/eval_set")).json();
+    const rows = await (await fetch("api/eval_set")).json();
     for (const r of rows) { BYQ[r.query.trim().toLowerCase()] = r; BYID[r.id] = r; }
   } catch (e) {}
   $("#examples").innerHTML = Object.entries(EXAMPLES).map(([h, ids]) =>
@@ -156,19 +173,21 @@ async function ask(question) {
   const bot = document.createElement("div");
   bot.className = "msg bot";
   bot.innerHTML = `<div class="who">Agent</div>
-    <div class="now"><span class="dots"><i></i><i></i><i></i></span><span class="t">Sending the question to the agent</span><span class="clock">0.0 s</span></div>
+    <div class="now"><span class="dots"><i></i><i></i><i></i></span><span class="kind llm" style="display:none">LLM CALL</span><span class="t">Sending the question to the agent</span><span class="clock">0.0 s</span></div>
     <div class="answer"></div>
+    <div class="flowbox"></div>
     <details class="steps"><summary>Show the steps</summary><div class="list"></div></details>`;
   chat.appendChild(bot);
   bot.scrollIntoView({ block: "end", behavior: "smooth" });
   const now = $(".now", bot), list = $(".list", bot), t0 = performance.now();
   const timer = setInterval(() => { $(".clock", now).textContent = ((performance.now() - t0) / 1000).toFixed(1) + " s"; }, 100);
   const setNow = (text) => { const el = $(".t", now); if (el.textContent === text) return; el.textContent = text; el.classList.remove("swap"); void el.offsetWidth; el.classList.add("swap"); };
-  const stack = []; let n = 0, nRead = 0;
+  const els = {}; let inGate = false; let n = 0, nRead = 0, nLlm = 0; const seq = [];  // steps keyed by sid: parallel steps can end in any order
 
   try {
-    const resp = await fetch("/api/ask_stream", { method: "POST", headers: { "Content-Type": "application/json" },
+    const resp = await fetch("api/ask_stream", { method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ question, fresh: true }) });
+    if (resp.status === 429) throw new Error((await resp.json()).error || "Too many questions, try again shortly");
     const reader = resp.body.getReader(), dec = new TextDecoder();
     let buf = "";
     for (;;) {
@@ -183,15 +202,22 @@ async function ask(question) {
         if (ev.type === "queued") setNow("Waiting for the model to be free (one question at a time)");
         else if (ev.type === "start") {
           setNow(nowText(ev, nRead));
-          if (ev.step === "agent.ask") { stack.push(null); continue; }
+          const isLlm = ev.step.startsWith("llm.");
+          $(".now .kind", bot).style.display = isLlm ? "" : "none";
+          if (ev.step === "agent.ask") continue;
+          if (ev.step !== "safety_gate") seq.push(ev.step);
+          if (isLlm) nLlm++;
+          renderFlow(bot, seq, nLlm);
           const el = document.createElement("div");
-          el.className = "tool" + (stack.some((x) => x && x.dataset.step === "safety_gate") ? " child" : "");
+          el.className = "tool" + (isLlm ? " llm" : "") + (inGate && ev.step !== "safety_gate" ? " child" : "");
+          if (ev.step === "safety_gate") inGate = true;
           el.dataset.step = ev.step;
-          el.innerHTML = `<div class="tool-h"><code>${++n}. ${esc(ev.step)}</code><span class="tool-s">running…</span></div><div class="tool-w">${esc(WHAT[ev.step] || "")}</div><div class="b"></div>`;
-          list.appendChild(el); stack.push(el);
+          el.innerHTML = `<div class="tool-h"><span><span class="kind${isLlm ? " llm" : ""}">${isLlm ? `LLM CALL #${nLlm}` : ev.step === "safety_gate" ? "GATE" : ev.step === "tool.verify_quote" ? "CODE CHECK" : "TOOL"}</span><code>${++n}. ${esc(ev.step)}</code></span><span class="tool-s">running…</span></div><div class="tool-w">${esc(WHAT[ev.step] || "")}</div><div class="b"></div>`;
+          list.appendChild(el); els[ev.sid] = el;
         } else if (ev.type === "end") {
           if (ev.step === "tool.get_abstract" && ev.ok) nRead++;
-          const el = stack.pop(); if (!el) continue;
+          if (ev.step === "safety_gate") inGate = false;
+          const el = els[ev.sid]; if (!el) continue;
           const bits = [];
           if (ev.prompt_tokens != null) bits.push(`${ev.prompt_tokens} in · ${ev.completion_tokens} out`);
           if (ev.cached != null) bits.push(ev.cached ? "from cache" : "live");
@@ -203,7 +229,8 @@ async function ask(question) {
           clearInterval(timer);
           now.classList.add("done");
           $(".answer", bot).innerHTML = answerHtml(ev.result, gold, ev.t);
-          $(".steps summary", bot).textContent = `Show the ${n} steps`;
+          $(".steps summary", bot).textContent = `Show the ${n} steps (${nLlm} LLM call${nLlm === 1 ? "" : "s"} highlighted)`;
+          $(".now .kind", bot).style.display = "none";
         }
       }
     }
@@ -214,6 +241,31 @@ async function ask(question) {
     clearInterval(timer); send.disabled = false; q.focus();
     bot.scrollIntoView({ block: "end", behavior: "smooth" });
   }
+}
+
+const SHORT = { "llm.safety": "safety model", "llm.planner": "planner", "llm.replan": "re-planner", "llm.executor": "executor",
+  "llm.critic": "critic", "tool.search_abstracts": "search", "tool.get_abstract": "read abstract", "tool.verify_quote": "verify quote",
+  "tool.conclusion_sentences": "conclusion" };
+function renderFlow(bot, seq, nLlm) {
+  // collapse runs of the same step: search ×3, read abstract ×5
+  const groups = [];
+  for (const s of seq) { const g = groups[groups.length - 1]; if (g && g.s === s) g.n++; else groups.push({ s, n: 1 }); }
+  const chips = groups.map((g) => `<span class="f${g.s.startsWith("llm.") ? " llm" : ""}">${esc(SHORT[g.s] || g.s)}${g.n > 1 ? " ×" + g.n : ""}</span>`);
+  $(".flowbox", bot).innerHTML = `<div class="flow">${chips.join('<span class="a">→</span>')}</div>
+    <div class="flow-legend"><b>■ ${nLlm} LLM call${nLlm === 1 ? "" : "s"}</b> in orange · grey = tools and code checks (no model)</div>`;
+}
+
+// PubMed link for a PMID (digits only; opens in a new tab)
+function pubmed(p) {
+  const id = String(p ?? "").replace(/\D/g, "");
+  return id ? `<a class="mono pm" href="https://pubmed.ncbi.nlm.nih.gov/${id}/" target="_blank" rel="noopener noreferrer" title="Open PMID ${id} on PubMed">${id} ↗</a>` : esc(String(p ?? ""));
+}
+
+let TRACE_UI = "";
+function traceLine(id) {
+  if (!id) return "";
+  const link = TRACE_UI ? ` · <a href="${esc(TRACE_UI)}/trace/${esc(id)}" target="_blank" rel="noopener noreferrer">open this trace in Jaeger ↗</a>` : "";
+  return `<div class="note">OpenTelemetry trace ID <span class="mono">${esc(id)}</span>${link}</div>`;
 }
 
 function fmtMs(ms) { return ms >= 1000 ? (ms / 1000).toFixed(1) + " s" : Math.round(ms * 10) / 10 + " ms"; }
@@ -235,14 +287,15 @@ function answerHtml(res, gold, secs) {
   return `${head}<div class="badges">${b.join("")}</div>
     ${res.message ? `<p>${esc(res.message)}</p>` : ""}
     ${res.explanation ? `<p>${esc(res.explanation)}</p>` : ""}
-    ${res.evidence_quote ? `<blockquote>${esc(res.evidence_quote)}</blockquote><div class="note">Source: PMID <span class="mono">${esc(res.citation_pmid)}</span></div>` : ""}
+    ${res.evidence_quote ? `<blockquote>${esc(res.evidence_quote)}</blockquote><div class="note">Source: PMID ${pubmed(res.citation_pmid)} · <a href="https://pubmed.ncbi.nlm.nih.gov/${esc(String(res.citation_pmid).replace(/\D/g, ""))}/" target="_blank" rel="noopener noreferrer">read the study on PubMed</a></div>` : ""}
     ${res.error ? `<p class="note" style="color:var(--err)">${esc(res.error)}</p>` : ""}
-    <div class="note" style="margin-top:6px">${c && c.approved != null ? `Critic ${c.approved ? "approved" : "did not approve"}${c.revisions ? ` after ${c.revisions} revision(s)` : ""}${c.downgraded ? ", downgraded to maybe" : ""} · ` : ""}${u.llm_calls ?? 0} model calls · ${u.tool_calls ?? 0} tool calls · ${(u.tokens ?? 0).toLocaleString()} tokens · ${secs.toFixed(1)} s</div>`;
+    <div class="note" style="margin-top:6px">${c && c.approved != null ? `Critic ${c.approved ? "approved" : "did not approve"}${c.revisions ? ` after ${c.revisions} revision(s)` : ""}${c.downgraded ? ", downgraded to maybe" : ""} · ` : ""}${u.llm_calls ?? 0} model calls · ${u.tool_calls ?? 0} tool calls · ${(u.tokens ?? 0).toLocaleString()} tokens · ${secs.toFixed(1)} s</div>
+    ${traceLine(res.trace_id)}`;
 }
 
 function stepBody(ev, gold) {
   const o = ev._output || {}, v = ev._result, gp = gold && gold.gold_pmid;
-  const pm = (p) => `<span class="mono ${p && p === gp ? "gold" : ""}">${esc(p)}${p && p === gp ? " ★ gold" : ""}</span>`;
+  const pm = (p) => `<span class="${p && p === gp ? "gold" : ""}">${pubmed(p)}${p && p === gp ? " ★ gold" : ""}</span>`;
   const err = ev.error ? `<div class="kv"><span class="k">error</span><span style="color:var(--err)">${esc(ev.error)}</span></div>` : "";
   const yn = (x) => x === true ? "yes" : x === false ? "no" : "—";
   switch (ev.step) {

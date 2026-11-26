@@ -210,16 +210,21 @@ class Handler(BaseHTTPRequestHandler):
 
     def _client(self):
         # Behind a proxy (Streamlit container) the caller can pass its own end-user id.
-        return self.headers.get("X-Client-Id") or self.client_address[0]
+        # Behind a hosting proxy (Hugging Face Spaces) the visitor's address is in X-Forwarded-For.
+        fwd = (self.headers.get("X-Forwarded-For") or "").split(",")[0].strip()
+        return self.headers.get("X-Client-Id") or fwd or self.client_address[0]
 
     def do_GET(self):
         path = urlparse(self.path).path
         if path in ("/", "/index.html"):
-            return self._file(STATIC_DIR / "index.html", "text/html; charset=utf-8")
+            # HOME_PAGE=eval (set in the Hugging Face Space) makes the live chat page the front page
+            page = "eval.html" if os.environ.get("HOME_PAGE") == "eval" and path == "/" else "index.html"
+            return self._file(STATIC_DIR / page, "text/html; charset=utf-8")
         if path == "/api/health":
             try:
                 return self._json(200, {"ok": True, "docs": doc_count(get_backend()), "mode": MODE,
-                                        "cache": CACHE.stats(), "rate_limit_per_min": RATE_PER_MIN})
+                                        "cache": CACHE.stats(), "rate_limit_per_min": RATE_PER_MIN,
+                                        "trace_ui": os.environ.get("TRACE_UI_URL", "")})
             except Exception as e:
                 return self._json(500, {"ok": False, "docs": 0, "error": str(e)})
         if path == "/api/examples":
@@ -283,6 +288,11 @@ class Handler(BaseHTTPRequestHandler):
             return self._json(200, res)
 
         if path == "/api/ask_stream":
+            if os.environ.get("LIMIT_STREAM") == "1":  # public deployments: same token bucket as /api/ask
+                ok, retry = LIMITER.check(self._client())
+                if not ok:
+                    return self._json(429, {"status": "error", "error": f"Too many questions: try again in {retry}s"},
+                                      {"Retry-After": retry})
             return self._ask_stream(str(body.get("question") or ""), fresh=bool(body.get("fresh", True)))
 
         if path == "/api/feedback":
