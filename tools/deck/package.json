@@ -1,0 +1,17 @@
+{
+  "name": "medevidence-deck",
+  "version": "1.0.0",
+  "description": "Builds the Week 3 slide deck",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "jszip": "^3.10.1",
+    "pptxgenjs": "^3.12.0"
+  }
+}
