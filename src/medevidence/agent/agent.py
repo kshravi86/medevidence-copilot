@@ -7,7 +7,10 @@ Hand-rolled orchestration (no framework), so every guard is explicit:
 - token budget: every LLM call is charged; when the cap is hit the agent stops and returns its best safe answer
 - context window: abstracts are dropped (lowest rank first) until the executor prompt fits the 8192-token limit
 """
+import contextvars
+import os
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 from .. import metrics
 from ..hybrid import rrf
@@ -18,6 +21,7 @@ from .tracing import Trace
 
 CONTEXT_LIMIT = 8192        # endpoint limit, prompt + completion
 EXEC_MAX_OUT = 600
+PARALLEL_SEARCH = os.environ.get("MEDEVIDENCE_PARALLEL_SEARCH", "1") != "0"  # run a plan's searches at once
 
 
 def approx_tokens(messages):
@@ -67,19 +71,22 @@ class Agent:
         return None, raw
 
     def _tool(self, st, tr, name, **kw):
-        why = st.budget.exhausted()
+        with st.lock:  # tools can run on several threads at once (parallel search)
+            why = st.budget.exhausted()
         if why:
             raise BudgetExceeded(why)
         with tr.span(f"tool.{name}", **{k: (v if not isinstance(v, str) else v[:120]) for k, v in kw.items()}) as sp:
             res = self.tools.call(name, **kw)
-            st.tool_calls += 1
-            st.budget.charge(1)
+            with st.lock:
+                st.tool_calls += 1
+                st.budget.charge(1)
+                if not res.ok:
+                    st.tool_errors.append({"tool": name, "error": res.error})
             sp.update(ok=res.ok, **{f"meta_{k}": v for k, v in res.meta.items()})
             if tr.on_event is not None:
                 sp["_result"] = res.value
             if not res.ok:
                 sp["error"] = res.error
-                st.tool_errors.append({"tool": name, "error": res.error})
         return res
 
     # ---------------------------------------------------------------- public API
@@ -93,7 +100,7 @@ class Agent:
                "quote_verified": False, "citation_valid": False, "message": None, "retrieved": [],
                "plan": None, "critic": None, "safety": None, "error": None}
         try:
-            with tr.span("agent.ask", session=bool(session_id)):
+            with tr.span("agent.ask", session=bool(session_id), question=question[:300] if isinstance(question, str) else None):
                 if not isinstance(question, str) or not question.strip():
                     out["error"] = "Question is empty."
                 elif len(question) > 1500:
@@ -192,9 +199,19 @@ class Agent:
 
     def _gather(self, st, tr, plan, keep=None):
         ranked_lists = []
-        for q in plan["queries"]:
-            st.queries_tried.append(q)
-            r = self._tool(st, tr, "search_abstracts", query=q, k=8)
+        queries = plan["queries"]
+        st.queries_tried.extend(queries)
+        search = lambda q: self._tool(st, tr, "search_abstracts", query=q, k=8)  # noqa: E731
+        if PARALLEL_SEARCH and len(queries) > 1:
+            # all searches at once; each thread gets a copy of the context so its OpenTelemetry span
+            # nests under agent.ask and the no-cache flag still applies. Results keep the query order,
+            # so the merged ranking is the same as running them one by one.
+            with ThreadPoolExecutor(max_workers=len(queries)) as ex:
+                futures = [ex.submit(contextvars.copy_context().run, search, q) for q in queries]
+                results = [f.result() for f in futures]
+        else:
+            results = [search(q) for q in queries]
+        for r in results:
             if r.ok and r.value:
                 ranked_lists.append([(d["pmid"], d["score"]) for d in r.value])
         fused = [p for p, _ in rrf(ranked_lists, top=plan["n_read"])] if ranked_lists else []

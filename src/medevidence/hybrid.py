@@ -75,14 +75,17 @@ class Reranker:
         self.ce = CrossEncoder(RERANKERS[key], max_length=512, device=device or os.environ.get("RERANK_DEVICE", "mps"))
         self.abs = abstracts  # pmid -> text
         self.cache = {}
+        import threading
+        self._lock = threading.Lock()  # one GPU: parallel searches take turns on the cross-encoder
 
     def rerank(self, q, cands):
         """cands: ranked [(pmid, score)] -> reranked [(pmid, ce_score)]."""
-        todo = [p for p, _ in cands if (q, p) not in self.cache]
-        if todo:
-            sc = self.ce.predict([(q, self.abs[p]) for p in todo], batch_size=16, show_progress_bar=False)
-            for p, s in zip(todo, sc):
-                self.cache[(q, p)] = float(s)
+        with self._lock:
+            todo = [p for p, _ in cands if (q, p) not in self.cache]
+            if todo:
+                sc = self.ce.predict([(q, self.abs[p]) for p in todo], batch_size=16, show_progress_bar=False)
+                for p, s in zip(todo, sc):
+                    self.cache[(q, p)] = float(s)
         return sorted(((p, self.cache[(q, p)]) for p, _ in cands), key=lambda x: -x[1])
 
 

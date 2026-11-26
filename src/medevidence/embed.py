@@ -1,6 +1,7 @@
 """Client for the shared bge-small-en-v1.5 embedding endpoint (384-d, <=16 texts/request)."""
 import hashlib
 import sqlite3
+import threading
 import time
 
 import httpx
@@ -24,6 +25,7 @@ class Embedder:
         self.db.execute("CREATE TABLE IF NOT EXISTS e (k TEXT PRIMARY KEY, v BLOB)")
         self.truncated = set()  # texts that exceeded the 512-token limit and were cut
         self._tok = None
+        self._lock = threading.RLock()  # sqlite cache + tokenizer are shared by parallel searches
 
     def _key(self, t):
         return hashlib.sha256((self.model + "\x00" + t).encode()).hexdigest()
@@ -49,10 +51,11 @@ class Embedder:
 
     def _prep(self, text, max_tokens=500):
         """Cut text to the endpoint's 512-token limit using the model's own tokenizer (exact, one pass)."""
-        if self._tok is None:
-            from transformers import AutoTokenizer
-            self._tok = AutoTokenizer.from_pretrained("BAAI/bge-small-en-v1.5")
-        enc = self._tok(text, add_special_tokens=False, return_offsets_mapping=True)
+        with self._lock:
+            if self._tok is None:
+                from transformers import AutoTokenizer
+                self._tok = AutoTokenizer.from_pretrained("BAAI/bge-small-en-v1.5")
+            enc = self._tok(text, add_special_tokens=False, return_offsets_mapping=True)
         if len(enc["input_ids"]) <= max_tokens:
             return text
         self.truncated.add(text)
@@ -75,7 +78,11 @@ class Embedder:
         out = [None] * len(texts)
         todo = []
         for i, t in enumerate(texts):
-            row = None if fresh else self.db.execute("SELECT v FROM e WHERE k=?", (self._key(t),)).fetchone()
+            if fresh:
+                row = None
+            else:
+                with self._lock:
+                    row = self.db.execute("SELECT v FROM e WHERE k=?", (self._key(t),)).fetchone()
             if row:
                 out[i] = np.frombuffer(row[0], dtype=np.float32)
             else:
@@ -88,10 +95,11 @@ class Embedder:
                 vecs = [self._one_truncating(texts[i]) for i in idx]
             for i, v in zip(idx, vecs):
                 out[i] = v
-                if not fresh:
-                    self.db.execute("INSERT OR REPLACE INTO e VALUES (?,?)", (self._key(texts[i]), v.tobytes()))
             if not fresh:
-                self.db.commit()
+                with self._lock:
+                    for i in idx:
+                        self.db.execute("INSERT OR REPLACE INTO e VALUES (?,?)", (self._key(texts[i]), out[i].tobytes()))
+                    self.db.commit()
             if progress and (s // 16) % 25 == 0:
                 print(f"  embedded {s + len(idx)}/{len(todo)}", flush=True)
         m = np.vstack(out)

@@ -2,7 +2,8 @@
 
 Every agent step opens an OpenTelemetry span. Finished spans are written as JSON lines to
 `MEDEVIDENCE_TRACE_FILE` (default results/traces/spans.jsonl), so traces can be inspected offline
-or shipped to any OTLP backend later by swapping the exporter. Each request also keeps a light
+or viewed in an OTLP backend: set OTEL_EXPORTER_OTLP_ENDPOINT (e.g. http://127.0.0.1:4318 for a local Jaeger)
+and spans are also sent there. Each request also keeps a light
 in-memory step list (`Trace.steps`) that the API returns and the eval script aggregates.
 If opentelemetry is not installed, spans are no-ops and only the step list is kept.
 """
@@ -59,8 +60,17 @@ def tracer():
     with _INIT:
         if _TRACER is None:
             path = Path(os.environ.get("MEDEVIDENCE_TRACE_FILE", ROOT / "results" / "traces" / "spans.jsonl"))
-            provider = TracerProvider()
+            from opentelemetry.sdk.resources import Resource
+            provider = TracerProvider(resource=Resource.create({"service.name": os.environ.get("OTEL_SERVICE_NAME", "medevidence-agent")}))
             provider.add_span_processor(SimpleSpanProcessor(JsonlSpanExporter(path)))
+            # Optional: also send spans to an OTLP backend (e.g. Jaeger at http://127.0.0.1:4318) for a visual trace view.
+            if os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT"):
+                try:
+                    from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+                    from opentelemetry.sdk.trace.export import BatchSpanProcessor
+                    provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
+                except ImportError:  # exporter not installed: keep the JSONL file only
+                    pass
             _TRACER = provider.get_tracer("medevidence.agent")
     return _TRACER
 
@@ -78,11 +88,14 @@ class Trace:
         self.steps = []
         self.trace_id = None
         self.on_event = on_event  # optional callback(event: dict) for live step streaming (the /eval page)
+        self._lock = threading.Lock()  # steps can run on several threads (parallel search)
+        self._seq = 0
 
     def _emit(self, event):
         if self.on_event is not None:
             try:
-                self.on_event(event)
+                with self._lock:  # one event at a time on the stream
+                    self.on_event(event)
             except Exception:  # a broken listener must never break the agent
                 pass
 
@@ -94,7 +107,10 @@ class Trace:
         sp = cm.__enter__() if cm else None
         if sp is not None and self.trace_id is None:
             self.trace_id = format(sp.get_span_context().trace_id, "032x")
-        self._emit({"type": "start", "step": name, **{k: v for k, v in attrs.items() if v is not None}})
+        with self._lock:
+            self._seq += 1
+            sid = self._seq  # pairs each step's start and end events when steps overlap
+        self._emit({"type": "start", "step": name, "sid": sid, **{k: v for k, v in attrs.items() if v is not None}})
         try:
             yield step
         except Exception as e:
@@ -112,6 +128,6 @@ class Trace:
             # keys starting with "_" (full LLM outputs, tool results) go to the live stream only,
             # so the stored trace and the OpenTelemetry spans stay small
             public = {k: v for k, v in step.items() if not k.startswith("_")}
-            self._emit({"type": "end", **step})
+            self._emit({"type": "end", "sid": sid, **step})
             step.clear(); step.update(public)
             self.steps.append(step)

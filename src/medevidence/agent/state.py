@@ -50,6 +50,7 @@ class AgentState:
     llm_calls: int = 0
     json_repairs: int = 0
     budget: Budget = field(default_factory=Budget)
+    lock: threading.Lock = field(default_factory=threading.Lock, repr=False, compare=False)  # parallel tool calls
 
 
 class SessionStore:
