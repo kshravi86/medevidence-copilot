@@ -99,5 +99,108 @@
     "improvement": false
    }
   }
+ },
+ "agent_nocritic": {
+  "verdict_acc_all": 0.7051282051282052,
+  "strict_all": 0.6923076923076923,
+  "format_all": 1.0,
+  "verdict_acc_verbatim": 0.7333333333333333,
+  "strict_verbatim": 0.7111111111111111,
+  "format_verbatim": 1.0,
+  "verdict_acc_paraphrase": 0.76,
+  "strict_paraphrase": 0.76,
+  "format_paraphrase": 1.0,
+  "verdict_acc_boundary": 0.375,
+  "strict_boundary": 0.375,
+  "format_boundary": 1.0,
+  "macro_f1": 0.6069549771127963,
+  "citation_acc": 0.9615384615384616,
+  "grounded_acc": 0.9615384615384616,
+  "faithful_acc": 0.9358974358974359,
+  "hallucinated_pmids": 0,
+  "over_refusal_rate": 0.01282051282051282,
+  "over_refusal_boundary": 0,
+  "refusal_recall": 1.0,
+  "refusal_correct": 0.9545454545454546,
+  "emergency_refused": "7/7",
+  "format_errors": {},
+  "pred_dist": {
+   "yes": 42,
+   "no": 24,
+   "maybe": 10,
+   "null": 2
+  },
+  "n_items": 100,
+  "task_completion_rate": 1.0,
+  "avg_tool_calls": 6.99,
+  "avg_llm_calls": 2.55,
+  "avg_tokens": 3226.66,
+  "avg_cost_usd_est": 0.00019244,
+  "cost_assumption_usd_per_mtok": {
+   "in": 0.05,
+   "out": 0.2
+  },
+  "latency_median_s": 3.940661072731018,
+  "latency_p90_s": 4.596606969833374,
+  "json_repairs": 0,
+  "tool_errors": 0,
+  "gold_in_context": 0.9871794871794872,
+  "failure_taxonomy": {
+   "reasoning_error": 19,
+   "hallucination": 4,
+   "over_refusal": 1,
+   "refusal_wrong_category": 1
+  },
+  "rougeL_all": 0.2176871794871795,
+  "rougeL_answered": 0.22341578947368423,
+  "critic": {
+   "approved_first_draft": 74,
+   "revised": 2,
+   "downgraded_to_maybe": 0,
+   "verdicts_fixed": 0,
+   "verdicts_broken": 0
+  },
+  "vs_baselines": {
+   "week1_bm25_fewshot (spec baseline b) :: strict": {
+    "agent": 0.6923076923076923,
+    "baseline": 0.5128205128205128,
+    "diff": 0.1794871794871795,
+    "ci95": [
+     0.0641025641025641,
+     0.2948717948717949
+    ],
+    "improvement": true
+   },
+   "week1_bm25_fewshot (spec baseline b) :: c1_verdict": {
+    "agent": 0.7051282051282052,
+    "baseline": 0.5769230769230769,
+    "diff": 0.1282051282051282,
+    "ci95": [
+     0.01282051282051282,
+     0.24358974358974358
+    ],
+    "improvement": true
+   },
+   "week2_bm25_top1 (stronger single prompt) :: strict": {
+    "agent": 0.6923076923076923,
+    "baseline": 0.6025641025641025,
+    "diff": 0.08974358974358974,
+    "ci95": [
+     0.0,
+     0.19230769230769232
+    ],
+    "improvement": false
+   },
+   "week2_bm25_top1 (stronger single prompt) :: c1_verdict": {
+    "agent": 0.7051282051282052,
+    "baseline": 0.6410256410256411,
+    "diff": 0.0641025641025641,
+    "ci95": [
+     -0.02564102564102564,
+     0.15384615384615385
+    ],
+    "improvement": false
+   }
+  }
  }
 }
