@@ -54,6 +54,13 @@ pres.defineSlideMaster({
 });
 
 pres.defineSlideMaster({
+  title: "COVER",
+  background: { color: BG },
+  objects: [],
+  slideNumber: { x: 12.2, y: 6.95, w: 0.4, h: 0.3, fontSize: 10, color: MUTED, align: "right" },
+});
+
+pres.defineSlideMaster({
   title: "DEMO",
   background: { color: BG },
   objects: [
@@ -78,12 +85,21 @@ if (false) {
   s.addNotes("The safety gate runs before any search. Emergency rule hits refuse straight away without a model call. The critic rarely changes the verdict: it approved 70 of 76 first drafts in the full evaluation.");
 }
 
+// ---- Title slide
+{
+  const s = pres.addSlide({ masterName: "COVER", sectionTitle: "Week 3 agent" });
+  s.addShape(pres.shapes.RECTANGLE, { x: M, y: 2.2, w: 1.2, h: 0.08, fill: { color: C.accent4 }, line: { color: C.accent4, width: 0 }, objectName: "Title rule" });
+  s.addText("MedEvidence Copilot", { x: M, y: 2.45, w: W, h: 1.2, fontSize: 60, bold: true, color: INK, fontFace: "Arial",
+    margin: 0, valign: "top", isTextBox: true, objectName: "Project name" });
+  s.addText("Week 3 and Week 4", { x: M, y: 3.75, w: W, h: 0.7, fontSize: 32, bold: true, color: ACC, margin: 0, valign: "top", isTextBox: true, objectName: "Weeks" });
+  s.addNotes("MedEvidence Copilot answers yes, no or maybe research questions from PubMed abstracts, always citing one retrieved study and quoting it word for word. This deck covers Weeks 3 and 4: the agent pipeline, an example run, and results against Weeks 1 and 2 on the same 100 questions.");
+}
 // ---- Slide 2: safety gate (native shapes, 3 examples)
 {
   const s = pres.addSlide({ masterName: "FIGURE", sectionTitle: "Week 3 agent" });
   s.addText("STEP 1 · SAFETY GATE", { placeholder: "eyebrow" });
   s.addText("The safety gate runs before any search", { placeholder: "title" });
-  s.addText("Two checks. If either one refuses, the question stops here.", { placeholder: "lede" });
+  s.addText("One model call decides whether the question can go on.", { placeholder: "lede" });
 
   const box = (runs, o) => s.addText(runs, {
     shape: pres.shapes.ROUNDED_RECTANGLE, rectRadius: 0.08, valign: "middle", align: "center",
@@ -95,20 +111,17 @@ if (false) {
     line: { color: ACC, width: 1.5, endArrowType: "triangle" }, objectName: name });
   const head = (t, c) => ({ text: t, options: { bold: true, fontSize: 12, charSpacing: 1, color: c || ACC, breakLine: true } });
 
-  const y = 2.55, h = 1.45, a = 0.3, wA = 1.85, wB = 2.9, wC = 2.9, wD = W - wA - wB - wC - 3 * a;
+  const y = 2.55, h = 1.45, a = 0.4, wA = 2.6, wC = 5.0, wD = W - wA - wC - 2 * a;
   let x = M;
   box([head("QUESTION"), { text: "Before any planning or search" }], { x, y, w: wA, h, name: "Gate input" });
-  x += wA; arrow(x, x + a, y + h / 2, "Arrow rules"); x += a;
-  box([head("1 · CODE RULES"), { text: "no model call", options: { fontSize: 11, color: MUTED, breakLine: true } },
-    { text: "Regex: emergency signs, self-harm, a dose or a diagnosis for one person" }], { x, y, w: wB, h, name: "Code rules" });
-  x += wB; arrow(x, x + a, y + h / 2, "Arrow classifier"); x += a;
-  box([head("2 · LLM CLASSIFIER", NAVY), { text: "1 model call", options: { fontSize: 11, color: NAVY, breakLine: true } },
-    { text: "Catches indirect requests the rules miss. Skipped if the rules already found an emergency.", options: { color: NAVY } }],
+  x += wA; arrow(x, x + a, y + h / 2, "Arrow classifier"); x += a;
+  box([head("LLM CLASSIFIER", NAVY), { text: "1 model call", options: { fontSize: 11, color: NAVY, breakLine: true } },
+    { text: "Labels the message: in scope, personal diagnosis, drug dosing or emergency. Reads intent, not keywords.", options: { color: NAVY } }],
     { x, y, w: wC, h, fill: MODEL, line: MODEL, name: "LLM classifier" });
   x += wC; arrow(x, x + a, y + h / 2, "Arrow decision"); x += a;
   box([head("DECISION"),
-    { text: "Either refuses → ", options: {} }, { text: "refusal", options: { bold: true, breakLine: true } },
-    { text: "Both pass → ", options: {} }, { text: "planner", options: { bold: true } }], { x, y, w: wD, h, line: ACC, name: "Decision" });
+    { text: "Refuse category → ", options: {} }, { text: "refusal", options: { bold: true, breakLine: true } },
+    { text: "In scope → ", options: {} }, { text: "planner", options: { bold: true } }], { x, y, w: wD, h, line: ACC, name: "Decision" });
 
   s.addText("Precedence: emergency > drug dosing > personal diagnosis. The refusal text is a template chosen by code, never written by the model.",
     { x: M, y: 4.12, w: W, h: 0.35, fontSize: 13, color: MUTED, margin: 0, valign: "top", isTextBox: true, objectName: "Precedence" });
@@ -120,14 +133,14 @@ if (false) {
   const pass = (t) => cell(t, { color: T.accent3, bold: true });
   const stop = (t) => cell(t, { color: T.accent4, bold: true });
   s.addTable([
-    [hd("EXAMPLE QUESTION"), hd("CODE RULES"), hd("CLASSIFIER"), hd("RESULT")],
-    [cell("Do higher loading doses of vancomycin improve target attainment in critically ill adults?"), dim("no match"), dim("in scope"), pass("✓ Passes to planner")],
-    [cell("My husband's speech went slurred ten minutes ago and his face looks lopsided. Is that a stroke?"), dim("no match"), stop("emergency"), stop("✗ Refused · emergency")],
-    [cell("I'm a GP. My patient weighs 60 kg; how many mg of prednisolone should I start her on?"), stop("drug dosing"), stop("drug dosing"), stop("✗ Refused · drug dosing")],
-  ], { x: M, y: 4.6, w: W, colW: [6.15, 1.6, 1.6, 2.2], fontSize: 12, fontFace: "Calibri", valign: "middle",
+    [hd("EXAMPLE QUESTION"), hd("CLASSIFIER"), hd("RESULT")],
+    [cell("Do higher loading doses of vancomycin improve target attainment in critically ill adults?"), dim("in scope"), pass("✓ Passes to planner")],
+    [cell("I am clutching my chest, sweating and short of breath right now. Is this a heart attack?"), stop("emergency"), stop("✗ Refused · emergency")],
+    [cell("I'm a GP. My patient weighs 60 kg; how many mg of prednisolone should I start her on?"), stop("drug dosing"), stop("✗ Refused · drug dosing")],
+  ], { x: M, y: 4.6, w: W, colW: [7.55, 1.8, 2.2], fontSize: 12, fontFace: "Calibri", valign: "middle",
     margin: [4, 8, 4, 8], border: { type: "solid", pt: 1, color: T.dk1 }, rowH: [0.34, 0.5, 0.5, 0.5], objectName: "Safety examples" });
 
-  s.addNotes("The gate runs before the planner, so nothing is searched for a refused question. First, code rules (regular expressions) look for emergency signs, self-harm, a dose for one person, or a diagnosis for one person. If they find an emergency, the agent refuses at once with no model call. Otherwise one LLM classifier call labels the message in scope, personal diagnosis, drug dosing or emergency. If either check refuses, the highest-precedence category wins and a fixed refusal message is returned. Example 1 mentions dosing but is a population research question, so it passes. Example 2 has no rule match, but the classifier sees stroke signs happening now. Example 3 is caught by both. All three were run on the live agent.");
+  s.addNotes("The gate runs before the planner, so nothing is searched for a refused question. One LLM classifier call labels the message in scope, personal diagnosis, drug dosing or emergency. If it is not in scope, the highest-precedence category wins and a fixed refusal message is returned. Example 1 mentions dosing but is a population research question, so it passes. Example 2 describes heart attack signs happening now, so it is refused as an emergency. Example 3 asks for a dose for one patient, so it is refused as drug dosing. All three were run on the live agent.");
 }
 
 // ---- Slide 3: planner + retrieval
@@ -238,15 +251,14 @@ function stepKit(s) {
 
   s.addText("CODE GUARDS AROUND THE CALL", { x: M, y: 4.42, w: W, h: 0.3, fontSize: 11, bold: true, charSpacing: 1,
     color: MUTED, margin: 0, isTextBox: true, objectName: "Guards label" });
-  const gw = (W - 2 * 0.25) / 3, gy = 4.8, gh = 1.15;
+  const gw = (W - 0.25) / 2, gy = 4.8, gh = 1.15;
   [["CONTEXT WINDOW", "If the prompt would overflow 8k tokens, the lowest-ranked abstract is dropped"],
-   ["MALFORMED JSON", "One repair turn; if it still fails, the draft counts as insufficient evidence"],
    ["NOTHING RELEVANT", "The planner re-plans once with new wording; otherwise “insufficient evidence”"]]
     .forEach(([t, d], i) => box([head(t), { text: d }], { x: M + i * (gw + 0.25), y: gy, w: gw, h: gh, name: `Guard ${i + 1}` }));
 
   s.addText("Full evaluation (100 questions): citation accuracy 96.2%; the re-plan was needed for 1 question.",
     { x: M, y: 6.2, w: W, h: 0.4, fontSize: 13, color: MUTED, margin: 0, valign: "top", isTextBox: true, objectName: "Caption" });
-  s.addNotes("The executor gets the research question and the 3 to 5 abstracts chosen by retrieval, each headed with its PMID. In one model call it picks the single study that matches the question's population, intervention and outcome, decides yes, no or maybe from that study's own results, and returns JSON with the cited PMID, a word-for-word quote and a short explanation. Code guards the call: it drops the lowest-ranked abstract if the prompt would overflow the 8k context, gives one repair turn for malformed JSON, and if no abstract studies the question the planner re-plans once before the agent answers 'insufficient evidence'.");
+  s.addNotes("The executor gets the research question and the 3 to 5 abstracts chosen by retrieval, each headed with its PMID. In one model call it picks the single study that matches the question's population, intervention and outcome, decides yes, no or maybe from that study's own results, and returns JSON with the cited PMID, a word-for-word quote and a short explanation. Code guards the call: it drops the lowest-ranked abstract if the prompt would overflow the 8k context, and if no abstract studies the question the planner re-plans once before the agent answers 'insufficient evidence'.");
 }
 
 // ---- Slide: critic
@@ -320,7 +332,7 @@ function demoSlide({ eyebrow, question, steps, notes }) {
 const label = (t) => ({ text: t + "    ", options: { bold: true, color: ACC, fontSize: 13, charSpacing: 1 } });
 
 demoSlide({
-  eyebrow: "WEEK 3 · DEMO RUN, STEP BY STEP",
+  eyebrow: "EXAMPLE FLOW · ONE QUESTION THROUGH ALL 4 AGENTS",
   question: "In elderly hip fracture patients, does waiting longer to be transferred to geriatric rehab worsen outcomes?",
   steps: [
     { h: 0.62, badge: { model: true, title: "MODEL CALL ×1", sub: "safety classifier" }, runs: [label("1 · SAFETY"), { text: "Code rules: no match · classifier: in scope → " }, { text: "passes", options: { bold: true } }, TICK()] },
@@ -348,7 +360,6 @@ demoSlide({
   const data = [
     ["Strict (main score)", "51.3%", "57.7%", "59.0%", "59.0%", "69.2%"],
     ["Verdict accuracy", "57.7%", "62.8%", "61.5%", "65.4%", "70.5%"],
-    ["Macro F1 (yes/no/maybe)", "53.1%", "55.7%", "55.5%", "55.2%", "62.4%"],
     ["Citation correct", "88.5%", "94.9%", "94.9%", "97.4%", "96.2%"],
     ["Quote word for word", "82.1%", "88.5%", "88.5%", "87.2%", "94.9%"],
     ["Explanation faithful", "88.5%", "89.7%", "92.3%", "93.6%", "96.2%"],
@@ -379,7 +390,7 @@ demoSlide({
   s.addTable(rows, { x: M, y: 2.5, w: W, colW: [3.15, 1.68, 1.68, 1.68, 1.68, 1.68], fontSize: 12, fontFace: "Calibri",
     valign: "middle", margin: [2, 8, 2, 8], border: { type: "solid", pt: 0.75, color: T.dk1 },
     rowH: 0.288, objectName: "Results table" });
-  s.addNotes("All six runs use the same frozen 100 questions. Strict is the main score: right verdict, right study, word-for-word quote, faithful explanation, valid format, and not wrongly refused. The Week 3 agent is best on strict, verdict accuracy, macro F1, grounding and refusals. Against the Week 1 spec baseline the gain is clear (+17.9 points, 95% CI +7.7 to +28.2). Against Week 2 rerank top-3 it is +10.3 points (95% CI 0.0 to +20.5), so the CI touches 0 and it is not yet proven. The cost is about 1.8 times the tokens and 4 times the latency, because the agent makes 3 to 4 model calls per question. Retrieval was already strong in Week 2 with reranking; the agent's main gains are refusals (100% recall, 95.5% right category) and fewer grounding failures.");
+  s.addNotes("All six runs use the same frozen 100 questions. Strict is the main score: right verdict, right study, word-for-word quote, faithful explanation, valid format, and not wrongly refused. The Week 3 agent is best on strict, verdict accuracy, grounding and refusals. Against the Week 1 spec baseline the gain is clear (+17.9 points, 95% CI +7.7 to +28.2). Against Week 2 rerank top-3 it is +10.3 points (95% CI 0.0 to +20.5), so the CI touches 0 and it is not yet proven. The cost is about 1.8 times the tokens and 4 times the latency, because the agent makes 3 to 4 model calls per question. Retrieval was already strong in Week 2 with reranking; the agent's main gains are refusals (100% recall, 95.5% right category) and fewer grounding failures.");
 }
 
 // ---- Click animations ("Float In": fade + rise, On Click, one per step)
@@ -437,6 +448,6 @@ async function addAnimations(file, slideNums) {
 (async () => {
   await pres.writeFile({ fileName: OUT });
   await applyTheme(OUT, THEME);
-  await addAnimations(OUT, [5]);
+  await addAnimations(OUT, [6]);
   console.log("wrote", OUT);
 })();
