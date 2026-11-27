@@ -18,14 +18,15 @@ from pathlib import Path
 from collections import Counter
 from sklearn.model_selection import train_test_split
 
-PQA_REPO_DIR = Path('/Users/aakashr/pubmedqa')
-ORI_PQAL_PATH = PQA_REPO_DIR / 'data/ori_pqal.json'
-TEST_GT_PATH = PQA_REPO_DIR / 'data/test_ground_truth.json'
+ROOT = Path(__file__).resolve().parent.parent
+# A clone of github.com/pubmedqa/pubmedqa pins the source revision; without one, the files that
+# scripts/download_data.py puts in data/raw/ are used and the revision is recorded as "unknown".
+PQA_REPO_DIR = Path(os.environ['PUBMEDQA_REPO_DIR']) if os.environ.get('PUBMEDQA_REPO_DIR') else None
+_SRC = PQA_REPO_DIR / 'data' if PQA_REPO_DIR else ROOT / 'data' / 'raw'
+ORI_PQAL_PATH = _SRC / 'ori_pqal.json'
+TEST_GT_PATH = _SRC / 'test_ground_truth.json'
 
-OUTPUT_DIRS = [
-    Path('/Users/aakashr/medevidence-copilot/data/prepared'),
-    Path('/Users/aakashr/upgrad-api-tester/data/prepared')
-]
+OUTPUT_DIRS = [ROOT / 'data' / 'prepared']
 
 def sha256_file(filepath: Path) -> str:
     h = hashlib.sha256()
@@ -57,8 +58,13 @@ def main():
         raise FileNotFoundError("Official PubMedQA source files not found.")
 
     # 2. Pin Source Revision & Checksums
-    git_rev = subprocess.check_output(['git', '-C', str(PQA_REPO_DIR), 'rev-parse', 'HEAD']).decode().strip()
-    git_remote = subprocess.check_output(['git', '-C', str(PQA_REPO_DIR), 'remote', 'get-url', 'origin']).decode().strip()
+    try:
+        if PQA_REPO_DIR is None:
+            raise FileNotFoundError
+        git_rev = subprocess.check_output(['git', '-C', str(PQA_REPO_DIR), 'rev-parse', 'HEAD'], stderr=subprocess.DEVNULL).decode().strip()
+        git_remote = subprocess.check_output(['git', '-C', str(PQA_REPO_DIR), 'remote', 'get-url', 'origin'], stderr=subprocess.DEVNULL).decode().strip()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        git_rev, git_remote = 'unknown', 'https://github.com/pubmedqa/pubmedqa'
     ori_pqal_sha256 = sha256_file(ORI_PQAL_PATH)
     test_gt_sha256 = sha256_file(TEST_GT_PATH)
 

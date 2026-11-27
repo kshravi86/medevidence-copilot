@@ -12,7 +12,7 @@ RAW_DIR = ROOT / "data" / "raw"
 CORPUS_PATH = ROOT / "data" / "corpus.jsonl"
 CACHE_DIR = ROOT / ".cache"
 RESULTS = ROOT / "results"
-HF_DIR = Path(os.environ.get("PUBMEDQA_HF_DIR", "/Users/aakashr/pubmedqa/hf_data"))
+HF_DIR = Path(os.environ.get("PUBMEDQA_HF_DIR", ROOT / "data" / "parquet"))  # scripts/download_data.py
 
 
 def env(name: str, required: bool = True) -> str:
